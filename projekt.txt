@@ -1,0 +1,13 @@
+server dostaje obraz i wraca jego miniature
+obrazki kolejkuja sie na serverze
+
+front 
+prosta galeria
+grid z miniaturka obrazu lub progres bar
+1 widok na miniatury
+po kiknieciu otwiera sie duży podlad
+deskryptory w bazie danych
+miniatury w folderze
+
+uplad z front endu np zip
+klient retrofit
