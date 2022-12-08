@@ -1,0 +1,3 @@
+08.12.2022
+Added application frontend and backend schema, began implementing projected behavior
+
