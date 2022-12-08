@@ -1,27 +1,26 @@
 package agh.oop;
 
-import agh.oop.backend.GalleryService;
 import agh.oop.backend.IGalleryService;
 import agh.oop.gallery.model.GalleryImage;
-import javafx.scene.image.Image;
+import agh.oop.gallery.model.ImageContainer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.util.Arrays;
 
 public class RetrofitController {
     private IGalleryService galleryService = ServiceGenerator.createService(IGalleryService.class);
 
-    public void upload(byte[] imageData){
+    public void upload(GalleryImage galleryImage){
         try {
-            Call<Integer> call = galleryService.uploadGalleryImage(imageData);
+            Call<Integer> call = galleryService.uploadGalleryImage(galleryImage.getImageData());
             call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
                 if(response.isSuccessful()) {
                     int i = response.body();
                     System.out.println("Image sent: " + i);
+//                    getMiniature(galleryImage);
                 } else {
                     System.out.println(response.errorBody());
                 }
@@ -36,6 +35,29 @@ public class RetrofitController {
             e.getCause();
             e.printStackTrace();
         }
+    }
+    public void getMiniature(GalleryImage galleryImage){
+        Call<byte[]> call = galleryService.getImageMiniature(galleryImage.getName());
+        call.enqueue(new Callback<byte[]>() {
+            @Override
+            public void onResponse(Call<byte[]> call, Response<byte[]> response) {
+                if(response.isSuccessful()) {
+                    byte[] buffer = response.body();
+                    galleryImage.setMiniImage(buffer);
+                } else {
+                    System.out.println(response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<byte[]> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void initModel(ImageContainer imageContainer){
+
     }
 
 

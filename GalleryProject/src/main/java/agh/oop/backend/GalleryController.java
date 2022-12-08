@@ -16,4 +16,16 @@ public class GalleryController {
         return 10;
         //galleryService.upload();
     }
+    @RequestMapping(value = "/getImageMiniature", method = RequestMethod.GET)
+    public byte[] addGalleryImage(@RequestBody String name){
+        System.out.println("sending miniature image");
+        return null ;
+    }
+
+    @RequestMapping(value = "/getOriginalImage", method = RequestMethod.GET)
+    public byte[] getOriginalImage(@RequestBody String name){
+        System.out.println("sending miniature image");
+        return null ;
+    }
+
 }

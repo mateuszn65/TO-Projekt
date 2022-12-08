@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<HBox
+        fx:id="galleryView"
+        xmlns="http://javafx.com/javafx"
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="agh.oop.gallery.controllers.GalleryViewController">
+
+            <ImageView fx:id="imageView" fitHeight="600.0" fitWidth="800.0" pickOnBounds="true"/>
+        </HBox>
+

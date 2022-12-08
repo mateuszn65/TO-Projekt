@@ -13,4 +13,4 @@
         text="upload"
         xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml"
-        fx:controller="agh.oop.gallery.controllers.ZipController"/>
+        fx:controller="agh.oop.gallery.controllers.ZipUtils"/>

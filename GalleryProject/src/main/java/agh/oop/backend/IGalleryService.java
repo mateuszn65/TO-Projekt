@@ -16,9 +16,14 @@ import java.util.concurrent.CompletableFuture;
 public interface IGalleryService {
     Observable<Image> getImages(int noImages);
     CompletableFuture<Image> upload(Image image, int dest_height, int dest_width);
+    //TO DO add name
     @POST("/addGalleryImage")
     Call<Integer> uploadGalleryImage(@Body byte[] imageData);
 
-    Image getOriginalImage(String filename);
+    @GET("/getImageMiniature")
+    Call<byte[]> getImageMiniature(@Body String name);
+
+    @GET("/getOriginalImage")
+    Call<byte[]> getOriginalImage(@Body String name);
 
 }

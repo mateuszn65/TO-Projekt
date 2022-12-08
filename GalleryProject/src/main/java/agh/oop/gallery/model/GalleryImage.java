@@ -12,18 +12,17 @@ public class GalleryImage {
     public static int miniHeight = 200;
 
     private String name;
-    private ObjectProperty<Image> originalImageProperty;
-    private Image miniImage;
+
+    private ObjectProperty<Image> miniImageProperty;
     private byte[] imageData;
 
     public byte[] getImageData() {
         return imageData;
     }
 
-    public GalleryImage(byte[] imageData){
+    public GalleryImage(String name, byte[] imageData){
         this.imageData = imageData;
-        Image image = new Image(new ByteArrayInputStream(imageData));
-        this.originalImageProperty = new SimpleObjectProperty<>(image);
+        this.name = name;
     }
     public String getName() {
         return name;
@@ -33,23 +32,17 @@ public class GalleryImage {
         this.name = name;
     }
 
-    public Image getOriginalImage() {
-        return originalImageProperty.get();
-    }
 
-    public void setOriginalImage(Image originalImage) {
-        this.originalImageProperty.set(originalImage);
-    }
 
     public Image getMiniImage() {
-        return miniImage;
+        return miniImageProperty.get();
     }
 
-    public void setMiniImage(Image miniImage) {
-        this.miniImage = miniImage;
+    public void setMiniImage(byte[] imageData) {
+        this.miniImageProperty = new SimpleObjectProperty<>(new Image(new ByteArrayInputStream(imageData)));
     }
 
-    public ObjectProperty<Image> getOriginalImageProperty() {
-        return originalImageProperty;
+    public ObjectProperty<Image> getMiniImageProperty() {
+        return this.miniImageProperty;
     }
 }
