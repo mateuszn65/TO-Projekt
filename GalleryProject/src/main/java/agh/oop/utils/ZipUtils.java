@@ -1,4 +1,4 @@
-package agh.oop.gallery.controllers;
+package agh.oop.utils;
 
 import agh.oop.gallery.model.GalleryImage;
 import javafx.event.ActionEvent;
@@ -25,7 +25,8 @@ public class ZipUtils {
             String name = zipEntry.getName();
             InputStream stream = file.getInputStream(zipEntry);
 
-            byte[] buffer = getImageData(stream);
+//            byte[] buffer = getImageData(stream);
+            byte[] buffer = stream.readAllBytes();
 
 
             if (!isImage(buffer))
@@ -36,7 +37,7 @@ public class ZipUtils {
         }
         return imageList;
     }
-    private static byte[] getImageData(InputStream inputStream){
+    public static byte[] getImageData(InputStream inputStream){
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             int nRead;

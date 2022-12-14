@@ -4,12 +4,15 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<VBox maxHeight="10000"
-      maxWidth="1000"
-      minHeight="0"
-      minWidth="0"
-      prefHeight="800.0"
-      prefWidth="1600.0"
+<?import javafx.scene.layout.GridPane?>
+
+<?import org.controlsfx.control.GridView?>
+<VBox maxHeight="Infinity"
+      maxWidth="Infinity"
+      prefHeight="600"
+      prefWidth="800"
+      minHeight="220"
+      minWidth="200"
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:id="galleryView"
@@ -19,11 +22,11 @@
             onAction="#handleUploadOnAction"
             onDragDropped="#handleDragDropped"
             onDragOver="#handleDragOver"
-            prefHeight="40.0"
-            prefWidth="400.0"
+            minHeight="40.0"
+            minWidth="100"
+            maxWidth="Infinity"
             text="upload"/>
-    <ListView fx:id="imagesListView" prefWidth="120"/>
-
+    <GridView fx:id="imagesGridView" prefWidth="Infinity"/>
 </VBox>
 
 
