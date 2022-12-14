@@ -1,10 +1,9 @@
 package agh.oop.backend;
 
-import java.awt.*;
+import javafx.scene.image.Image;
 import java.util.concurrent.CompletableFuture;
 
 public class ImageConverter implements Runnable{
-
     private Image img;
     private int dest_width;
     private int dest_height;

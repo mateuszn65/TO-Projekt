@@ -12,6 +12,7 @@ public class ImageDAO {
     private int id;
     private String filename;
     private String miniFilename;
+    public ImageDAO(){}
 
     public String getFilename() {
         return filename;

@@ -1,12 +1,13 @@
 package agh.oop.backend;
 
-import java.awt.Image;
+import javafx.scene.image.Image;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 
 public class ImageConverterQueue {
-    private List<ConverterQueueSubscriber> subscribers;
+    private List<ConverterQueueSubscriber> subscribers = new ArrayList<>();
 
     private void notifySubscribers(ImageConverter converter) {
         for(ConverterQueueSubscriber subscriber : subscribers) {

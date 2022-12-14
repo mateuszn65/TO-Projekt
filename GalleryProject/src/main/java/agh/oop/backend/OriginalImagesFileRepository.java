@@ -1,6 +1,6 @@
 package agh.oop.backend;
 
-import java.awt.*;
+import javafx.scene.image.Image;
 
 public class OriginalImagesFileRepository {
     public Image getImageByDescriptor(String filename) {

@@ -3,13 +3,17 @@ package agh.oop.backend;
 import agh.oop.backend.model.ImageDAO;
 import agh.oop.gallery.model.GalleryImage;
 import io.reactivex.rxjava3.core.Observable;
-import java.awt.Image;
+import javafx.scene.image.Image;
+import org.springframework.stereotype.Service;
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-public class GalleryService implements IGalleryService {
+@Service
+public class GalleryService{
 
     private GalleryRepository repository;
     private ImageConverterQueue queue;
@@ -21,7 +25,7 @@ public class GalleryService implements IGalleryService {
         this.originalRepository = originalRepository;
     }
 
-    @Override
+
     public Observable<Image> getImages(int noImages) {
         List<ImageDAO> imageDescriptors = repository.findAll();
         List<Image> images = new ArrayList<>();
@@ -31,14 +35,13 @@ public class GalleryService implements IGalleryService {
         return Observable.fromIterable(images);
     }
 
-    @Override
     public CompletableFuture<Image> upload(Image image, int dest_height, int dest_width) {
         CompletableFuture<Image> result = new CompletableFuture<>();
         queue.addImage(image, result, dest_height, dest_width);
         return result;
     }
 
-    @Override
+
     public Image getOriginalImage(String filename) {
         return originalRepository.getImageByDescriptor(filename);
     }

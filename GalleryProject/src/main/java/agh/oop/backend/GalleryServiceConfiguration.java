@@ -1,18 +1,18 @@
 package agh.oop.backend;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GalleryServiceConfiguration {
+//    @Bean
+//    CommandLineRunner commandLineRunner(GalleryRepository galleryRepository){
+//        return args -> {
+//
+//        };
+//    }
 
-
-    @Bean
-    public GalleryService galleryService(GalleryRepository galleryRepository,
-                                         OriginalImagesFileRepository fileRepository,
-                                         ImageConverterQueue queue) {
-        return new GalleryService(galleryRepository, queue, fileRepository);
-    }
 
     @Bean
     public OriginalImagesFileRepository fileRepository() {
