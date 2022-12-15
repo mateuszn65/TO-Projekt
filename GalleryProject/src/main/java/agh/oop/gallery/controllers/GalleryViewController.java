@@ -4,7 +4,9 @@ import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
 import agh.oop.utils.ImageStatus;
 import agh.oop.utils.ZipUtils;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -12,8 +14,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
@@ -36,6 +40,13 @@ public class GalleryViewController {
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
     }
 
 
@@ -108,28 +119,23 @@ public class GalleryViewController {
     }
     public void handleUploadOnAction(ActionEvent actionEvent) {
         try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            File file = fileChooser.showOpenDialog(primaryStage);
+            if (file == null) return;
 
-            JFileChooser chooser = new JFileChooser();
-            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                File file = chooser.getSelectedFile();
-                System.out.println(file);
-                if (file == null) {
-                    return;
+            List<GalleryImage> galleryImages= new ArrayList<>();
+            if (ZipUtils.isZip(file)){
+                galleryImages = ZipUtils.unzipImages(new ZipFile(file));
+            }else {
+                GalleryImage galleryImage;
+                if ((galleryImage = createGalleryImage(file)) != null){
+                    galleryImages.add(galleryImage);
                 }
-                List<GalleryImage> galleryImages= new ArrayList<>();
-                if (ZipUtils.isZip(file)){
-                    galleryImages = ZipUtils.unzipImages(new ZipFile(file));
-                }else {
-                    GalleryImage galleryImage;
-                    if ((galleryImage = createGalleryImage(file)) != null){
-                        galleryImages.add(galleryImage);
-                    }
-                }
-                for (int i = 0; i < galleryImages.size(); i++) {
-                    imageContainer.addToGallery(galleryImages.get(i));
-                    retrofitController.upload(galleryImages.get(i));
-                }
-
+            }
+            for (int i = 0; i < galleryImages.size(); i++) {
+                imageContainer.addToGallery(galleryImages.get(i));
+                retrofitController.upload(galleryImages.get(i));
             }
         }catch(Exception e){
             e.printStackTrace();
