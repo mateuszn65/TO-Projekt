@@ -17,4 +17,8 @@ Dodanie działającego frontendu
 ### 15.12.2022 ###
 Dodanie działającego backendu
 
+Dodawanie zdjęć z explorera plików
+
+Refaktoryzacja kodu
+
 
