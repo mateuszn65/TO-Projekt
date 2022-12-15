@@ -28,6 +28,11 @@ public class GalleryImage {
         this.name = name;
         this.imageStatusObjectProperty = new SimpleObjectProperty<>(ImageStatus.UPLOADING);
     }
+    public GalleryImage(int id, String name){
+        this.id = id;
+        this.name = name;
+        this.imageStatusObjectProperty = new SimpleObjectProperty<>(ImageStatus.UPLOADING);
+    }
     public String getName() {
         return name;
     }

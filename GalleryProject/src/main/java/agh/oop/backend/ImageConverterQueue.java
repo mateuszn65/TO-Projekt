@@ -8,6 +8,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class ImageConverterQueue {
     private List<ConverterQueueSubscriber> subscribers = new ArrayList<>();
+    public ImageConverterQueue(){
+    }
 
     private void notifySubscribers(ImageConverter converter) {
         for(ConverterQueueSubscriber subscriber : subscribers) {
@@ -19,8 +21,8 @@ public class ImageConverterQueue {
         subscribers.add(subscriber);
     }
 
-    public void addImage(Image img, CompletableFuture<Image> future, int dest_height, int dest_width) {
-        ImageConverter converter = new ImageConverter(img, dest_width, dest_height, future);
+    public void addImage(int id, byte[] imageData, int dest_width, int dest_height){
+        ImageConverter converter = new ImageConverter(id, imageData, dest_width, dest_height);
         notifySubscribers(converter);
     }
 }

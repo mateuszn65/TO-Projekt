@@ -37,22 +37,8 @@ public class ZipUtils {
         }
         return imageList;
     }
-    public static byte[] getImageData(InputStream inputStream){
-        try {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            int nRead;
-            byte[] data = new byte[16384];
 
-            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-            buffer.flush();
-            return buffer.toByteArray();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    private static boolean isImage(byte[] imageData) throws IOException {
+    public static boolean isImage(byte[] imageData) throws IOException {
         Tika tika = new Tika();
         String fileType = tika.detect(imageData);
         return fileType.startsWith("image");

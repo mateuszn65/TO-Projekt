@@ -1,11 +1,9 @@
 package agh.oop.backend;
 
-import agh.oop.backend.model.ImageDAO;
+import agh.oop.backend.model.ImageDescriptor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface GalleryRepository extends JpaRepository<ImageDAO, Integer> {
+public interface GalleryRepository extends JpaRepository<ImageDescriptor, Integer> {
 }

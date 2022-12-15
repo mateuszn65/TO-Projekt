@@ -19,7 +19,10 @@ import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipFile;
 
@@ -39,7 +42,7 @@ public class GalleryViewController {
     @FXML
     public void initialize() throws IOException {
         imageContainer = new ImageContainer();
-//        retrofitController.initModel(imageContainer);
+        retrofitController.initModel(imageContainer);
         placeholder = retrofitController.getPlaceholder();
 
         imagesGridView.setCellHeight(GalleryImage.miniHeight);
@@ -55,7 +58,10 @@ public class GalleryViewController {
                     @Override
                     protected void updateItem(GalleryImage item, boolean empty) {
                         super.updateItem(item, empty);
-                        if (empty || item.getImageStatus() == ImageStatus.UPLOADING) return;
+                        if (empty || item.getImageStatus() == ImageStatus.UPLOADING) {
+                            setGraphic(null);
+                            return;
+                        }
 //                        setText(item.getImageStatus().name());
 
                         ImageView photoIcon = new ImageView();
@@ -104,14 +110,25 @@ public class GalleryViewController {
     }
 
     public void handleDragDropped(DragEvent dragEvent) {
-        List<File> files = dragEvent.getDragboard().getFiles();
-        if (files.size() != 1)
-            return;
-        if (!ZipUtils.isZip(files.get(0)))
-            return;
-
         try {
-            List<GalleryImage> galleryImages = ZipUtils.unzipImages(new ZipFile(files.get(0)));
+            List<File> files = dragEvent.getDragboard().getFiles();
+            List<GalleryImage> galleryImages = new ArrayList<>();
+            if (ZipUtils.isZip(files.get(0))){
+                galleryImages= ZipUtils.unzipImages(new ZipFile(files.get(0)));
+
+            }else{
+                for (File file:files) {
+                    InputStream inputStream = new FileInputStream(file);
+                    byte[] buffer = inputStream.readAllBytes();
+                    inputStream.close();
+                    if (ZipUtils.isImage(buffer)){
+                        GalleryImage galleryImage = new GalleryImage(file.getName(), buffer);
+                        galleryImages.add(galleryImage);
+                    }
+                }
+            }
+
+
             for (int i = 0; i < galleryImages.size(); i++) {
                 imageContainer.addToGallery(galleryImages.get(i));
                 retrofitController.upload(galleryImages.get(i));

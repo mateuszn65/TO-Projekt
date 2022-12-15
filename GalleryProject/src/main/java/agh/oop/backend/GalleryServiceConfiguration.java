@@ -25,8 +25,8 @@ public class GalleryServiceConfiguration {
     }
 
     @Bean
-    public ImageConverterRunner converterRunner(ImageConverterQueue queue) {
-        ImageConverterRunner runner = new ImageConverterRunner(Runtime.getRuntime().availableProcessors());
+    public ImageConverterRunner converterRunner(ImageConverterQueue queue, GalleryService galleryService) {
+        ImageConverterRunner runner = new ImageConverterRunner(Runtime.getRuntime().availableProcessors(), galleryService);
         queue.subscribe(runner);
         return runner;
     }
