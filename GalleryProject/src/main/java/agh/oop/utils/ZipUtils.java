@@ -1,11 +1,6 @@
 package agh.oop.utils;
 
 import agh.oop.gallery.model.GalleryImage;
-import javafx.event.ActionEvent;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.TransferMode;
-import org.apache.tika.Tika;
-
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,6 +8,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import static agh.oop.utils.FileUtils.isImage;
 
 public class ZipUtils {
 
@@ -25,9 +22,7 @@ public class ZipUtils {
             String name = zipEntry.getName();
             InputStream stream = file.getInputStream(zipEntry);
 
-//            byte[] buffer = getImageData(stream);
             byte[] buffer = stream.readAllBytes();
-
 
             if (!isImage(buffer))
                 continue;
@@ -37,14 +32,6 @@ public class ZipUtils {
         }
         return imageList;
     }
-
-    public static boolean isImage(byte[] imageData) throws IOException {
-        Tika tika = new Tika();
-        String fileType = tika.detect(imageData);
-        return fileType.startsWith("image");
-    }
-
-
 
     public static boolean isZip(File file){
         int fileSig = 0;

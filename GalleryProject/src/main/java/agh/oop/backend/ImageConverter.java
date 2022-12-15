@@ -1,21 +1,19 @@
 package agh.oop.backend;
 
-import javafx.scene.image.Image;
-import net.coobird.thumbnailator.Thumbnails;
 
+import net.coobird.thumbnailator.Thumbnails;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
 
 public class ImageConverter implements Runnable{
     private int id;
     private byte[] img;
     private int dest_width;
     private int dest_height;
-    private GalleryService galleryService;
+    private ImageConverterService imageConverterService;
 
 
     public ImageConverter(int id, byte[] img, int dest_width, int dest_height) {
@@ -25,15 +23,14 @@ public class ImageConverter implements Runnable{
         this.dest_height = dest_height;
     }
 
-    public void setGalleryService(GalleryService galleryService) {
-        this.galleryService = galleryService;
+    public void setImageConverterService(ImageConverterService imageConverterService) {
+        this.imageConverterService = imageConverterService;
     }
 
     @Override
     public void run() {
         //converting
         try {
-
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             ByteArrayInputStream is = new ByteArrayInputStream(img);
             BufferedImage bufferedImage = ImageIO.read(is);
@@ -44,9 +41,9 @@ public class ImageConverter implements Runnable{
                     .toOutputStream(outputStream);
             byte[] data = outputStream.toByteArray();
 
-            galleryService.notifyConverted(id, data);
+            imageConverterService.notifyConverted(id, data);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
     }

@@ -3,8 +3,9 @@ package agh.oop;
 import agh.oop.backend.IGalleryService;
 import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
-import agh.oop.utils.ImageStatus;
+import agh.oop.gallery.model.ImageStatus;
 import com.google.common.primitives.Bytes;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
@@ -12,18 +13,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-import javax.imageio.ImageIO;
-import javax.persistence.criteria.CriteriaBuilder;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 public class RetrofitController {
-    private IGalleryService galleryService = ServiceGenerator.createService(IGalleryService.class);
+    private final IGalleryService galleryService = ServiceGenerator.createService(IGalleryService.class);
 
     public void upload(GalleryImage galleryImage){
         try {
@@ -35,7 +31,6 @@ public class RetrofitController {
                 if(response.isSuccessful()) {
                     assert response.body() != null;
                     int id = response.body();
-//                    System.out.println("Image " + galleryImage.getName() + " uploaded with id: " + id);
                     galleryImage.setId(id);
                     getMiniature(galleryImage);
                 } else {
@@ -56,11 +51,12 @@ public class RetrofitController {
 
     private void receivedMiniature(@NotNull Response<List<Byte>> response, GalleryImage galleryImage) {
         if(response.isSuccessful()) {
-//            System.out.println("received miniature for image: " + galleryImage.getName());
             assert response.body() != null;
             byte[] buffer = Bytes.toArray(response.body());
             galleryImage.setMiniImage(buffer);
-            galleryImage.setImageStatusProperty(ImageStatus.RECEIVED);
+            Platform.runLater(()->{
+                galleryImage.setImageStatusProperty(ImageStatus.RECEIVED);
+            });
         } else {
             System.out.println(response.errorBody());
         }
@@ -70,9 +66,11 @@ public class RetrofitController {
         Call<List<Byte>> call = galleryService.getImageMiniature(galleryImage.getId(), GalleryImage.miniWidth, GalleryImage.miniHeight);
         call.enqueue(new Callback<List<Byte>>() {
             @Override
-            public void onResponse(Call<List<Byte>> call, Response<List<Byte>> response) {
+            public void onResponse(@NotNull Call<List<Byte>> call, @NotNull Response<List<Byte>> response) {
                 if (response.code() == 202){
-                    galleryImage.setImageStatusProperty(ImageStatus.LOADING);
+                    Platform.runLater(()->{
+                        galleryImage.setImageStatusProperty(ImageStatus.LOADING);
+                    });
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -93,7 +91,7 @@ public class RetrofitController {
         Call<Map<Integer, String>> call = galleryService.getInitialImages();
         call.enqueue(new Callback<Map<Integer, String>>() {
             @Override
-            public void onResponse(Call<Map<Integer, String>> call, Response<Map<Integer, String>> response) {
+            public void onResponse(@NotNull Call<Map<Integer, String>> call, @NotNull Response<Map<Integer, String>> response) {
                 if(response.isSuccessful()){
                     assert response.body() != null;
                     Map<Integer, String> map = response.body();
@@ -106,12 +104,11 @@ public class RetrofitController {
             }
 
             @Override
-            public void onFailure(Call<Map<Integer, String>> call, Throwable t) {
+            public void onFailure(@NotNull Call<Map<Integer, String>> call, @NotNull Throwable t) {
                 t.printStackTrace();
             }
         });
     }
-
 
     public Image getPlaceholder() throws IOException {
         Response<List<Byte>> response = galleryService.getImagePlaceholder().execute();

@@ -1,4 +1,4 @@
-package agh.oop.utils;
+package agh.oop.gallery.model;
 
 public enum ImageStatus {
     UPLOADING,

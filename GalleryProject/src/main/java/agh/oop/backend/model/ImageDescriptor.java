@@ -1,6 +1,5 @@
 package agh.oop.backend.model;
 
-
 import javax.persistence.*;
 
 @Entity
@@ -11,8 +10,13 @@ public class ImageDescriptor {
     private String filename;
     @Enumerated(EnumType.STRING)
     private ImageDescriptorStatus imageStatus;
-//    private String miniFilename;
+
     public ImageDescriptor(){}
+
+    public ImageDescriptor(String filename, ImageDescriptorStatus imageStatus) {
+        this.filename = filename;
+        this.imageStatus = imageStatus;
+    }
 
     public int getId() {
         return id;
@@ -36,11 +40,5 @@ public class ImageDescriptor {
     public void setImageStatus(ImageDescriptorStatus imageStatus) {
         this.imageStatus = imageStatus;
     }
-//    public String getMiniFilename() {
-//        return miniFilename;
-//    }
 
-//    public void setMiniFilename(String miniFilename) {
-//        this.miniFilename = miniFilename;
-//    }
 }

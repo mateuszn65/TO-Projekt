@@ -1,7 +1,6 @@
 package agh.oop.gallery.model;
 
 
-import agh.oop.utils.ImageStatus;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -14,7 +13,7 @@ public class GalleryImage {
     public static int miniHeight = 100;
     private String name;
     private int id;
-    private ObjectProperty<ImageStatus> imageStatusObjectProperty;
+    private final ObjectProperty<ImageStatus> imageStatusObjectProperty;
 
     private Image miniImage;
     private byte[] imageData;
@@ -59,9 +58,7 @@ public class GalleryImage {
     }
 
     public void setImageStatusProperty(ImageStatus imageStatusObjectProperty) {
-        Platform.runLater(()->{
-            this.imageStatusObjectProperty.set(imageStatusObjectProperty);
-        });
+        this.imageStatusObjectProperty.set(imageStatusObjectProperty);
     }
 
     public void setId(int id) {

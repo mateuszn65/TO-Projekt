@@ -3,17 +3,16 @@ package agh.oop.backend;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 public class ImageConverterRunner implements ConverterQueueSubscriber {
-
     private ExecutorService executor;
-    private GalleryService galleryService;
+    private ImageConverterService imageConverterService;
 
-    public ImageConverterRunner(int threadPool, GalleryService galleryService) {
-        this.galleryService = galleryService;
+    public ImageConverterRunner(int threadPool, ImageConverterService imageConverterService) {
+        this.imageConverterService = imageConverterService;
         executor = Executors.newFixedThreadPool(threadPool);
     }
 
     public void notifyToConvert(ImageConverter converter) {
-        converter.setGalleryService(galleryService);
+        converter.setImageConverterService(imageConverterService);
         executor.submit(converter);
     }
 }
