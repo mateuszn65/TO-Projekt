@@ -6,7 +6,7 @@
 
 3.Teraz równocześnie można odpalić aplikację z pliku konfiguracyjnego w folderze run (bezpośrednie odpalenie z klasy GalleryApp nie działa)
 
-4.Aktualnie po przeciągnieciu paczki zip z obrazami na przycisk upload zostanie dodana miniatura obrazu, a po jego kliknięciu pokażę się orginalny obraz (backend do implementacji, serwer zwraca placeholder)
+4.Obrazy dodajemy przez przeciągniecie paczki zip lub obrazów na przycisk upload
 
 
 ## Application architecture ##

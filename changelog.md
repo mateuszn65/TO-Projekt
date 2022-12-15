@@ -14,11 +14,12 @@ Zaaktualizowanie kodu względem schematu
 ### 14.12.2022 ###
 Dodanie działającego frontendu
 
+### 15.12.2022 ###
+Dodanie działającego backendu
+
 ### aktualnie do zaimplementowania ###
 frontend:
-początkowa inicjalizacja modelu(zmienic bazę z create na update)
+ewentualne
 dodanie zipa z exploatora plików po naciśnieciu przycisku
-backend:
-zapis i odczyt z bazy danych
-konwertowanie obrazu na miniature (na zbiorze wątków)
+
 
