@@ -17,9 +17,4 @@ Dodanie działającego frontendu
 ### 15.12.2022 ###
 Dodanie działającego backendu
 
-### aktualnie do zaimplementowania ###
-frontend:
-ewentualne
-dodanie zipa z exploatora plików po naciśnieciu przycisku
-
 

@@ -105,6 +105,6 @@ public class GalleryService{
     }
 
     public List<Byte> getPlaceholder() throws IOException {
-        return getImageData( "loading.jpg");
+        return getImageData( "loading.png");
     }
 }
