@@ -1,4 +1,4 @@
-package agh.oop.backend;
+package agh.oop.backend.services.converter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

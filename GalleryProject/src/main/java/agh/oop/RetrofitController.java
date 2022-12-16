@@ -1,6 +1,6 @@
 package agh.oop;
 
-import agh.oop.backend.IGalleryService;
+import agh.oop.backend.services.gallery.IGalleryService;
 import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
 import agh.oop.gallery.model.ImageStatus;

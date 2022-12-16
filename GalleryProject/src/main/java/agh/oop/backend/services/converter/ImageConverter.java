@@ -1,4 +1,4 @@
-package agh.oop.backend;
+package agh.oop.backend.services.converter;
 
 
 import net.coobird.thumbnailator.Thumbnails;

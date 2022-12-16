@@ -1,14 +1,12 @@
-package agh.oop.backend;
+package agh.oop.backend.services.converter;
 
+import agh.oop.backend.persistence.GalleryRepository;
+import agh.oop.backend.persistence.OriginalImagesFileRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class GalleryServiceConfiguration {
-    @Bean
-    public OriginalImagesFileRepository fileRepository() {
-        return new OriginalImagesFileRepository();
-    }
+public class ConverterModuleConfiguration {
 
     @Bean
     public ImageConverterQueue converterQueue() {
@@ -27,12 +25,5 @@ public class GalleryServiceConfiguration {
                                                        ImageConverterQueue queue,
                                                        OriginalImagesFileRepository originalRepository){
         return new ImageConverterService(repository, queue, originalRepository);
-    }
-
-    @Bean
-    public GalleryService galleryService(GalleryRepository galleryRepository,
-                                         OriginalImagesFileRepository originalImagesFileRepository,
-                                         ImageConverterService imageConverterService){
-        return new GalleryService(galleryRepository, imageConverterService, originalImagesFileRepository);
     }
 }

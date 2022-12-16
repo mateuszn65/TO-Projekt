@@ -1,15 +1,11 @@
-package agh.oop.backend;
+package agh.oop.backend.controllers;
 
 
-import com.google.common.primitives.Bytes;
+import agh.oop.backend.services.gallery.GalleryService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

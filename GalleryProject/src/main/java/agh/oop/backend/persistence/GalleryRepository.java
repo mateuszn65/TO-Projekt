@@ -1,4 +1,4 @@
-package agh.oop.backend;
+package agh.oop.backend.persistence;
 
 import agh.oop.backend.model.ImageDescriptor;
 import org.springframework.data.jpa.repository.JpaRepository;

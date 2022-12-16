@@ -1,7 +1,10 @@
-package agh.oop.backend;
+package agh.oop.backend.services.gallery;
 
+import agh.oop.backend.persistence.GalleryRepository;
+import agh.oop.backend.persistence.OriginalImagesFileRepository;
 import agh.oop.backend.model.ImageDescriptor;
 import agh.oop.backend.model.ImageDescriptorStatus;
+import agh.oop.backend.services.converter.ImageConverterService;
 import com.google.common.primitives.Bytes;
 import java.io.*;
 import java.util.*;

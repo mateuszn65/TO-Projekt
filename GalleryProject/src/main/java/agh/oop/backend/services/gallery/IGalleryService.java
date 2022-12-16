@@ -1,4 +1,4 @@
-package agh.oop.backend;
+package agh.oop.backend.services.gallery;
 
 import retrofit2.Call;
 import retrofit2.http.*;

@@ -1,4 +1,4 @@
-package agh.oop.backend;
+package agh.oop.backend.persistence;
 
 import com.google.common.primitives.Bytes;
 import javax.imageio.ImageIO;

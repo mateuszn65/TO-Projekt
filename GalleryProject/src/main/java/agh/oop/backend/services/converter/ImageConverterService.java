@@ -1,5 +1,7 @@
-package agh.oop.backend;
+package agh.oop.backend.services.converter;
 
+import agh.oop.backend.persistence.GalleryRepository;
+import agh.oop.backend.persistence.OriginalImagesFileRepository;
 import agh.oop.backend.model.ImageDescriptor;
 import agh.oop.backend.model.ImageDescriptorStatus;
 import com.google.common.primitives.Bytes;
