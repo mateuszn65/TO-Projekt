@@ -4,6 +4,7 @@ import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
 import agh.oop.gallery.model.ImageStatus;
 import agh.oop.gallery.view.GalleryCellFactory;
+import agh.oop.utils.FileUtils;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import org.aspectj.util.FileUtil;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
 import java.io.*;
@@ -65,23 +67,14 @@ public class GalleryViewController {
     }
 
 
-    private void uploadFiles(List<File> files){
-        try {
-            List<GalleryImage> galleryImages;
-            if (isZip(files.get(0))) {
-                galleryImages = unzipImages(new ZipFile(files.get(0)));
-            } else {
-                galleryImages = getFilesContent(files);
-            }
-            for (int i = 0; i < galleryImages.size(); i++) {
-                imageContainer.addToGallery(galleryImages.get(i));
-                retrofitController.upload(galleryImages.get(i));
-            }
-        }catch (IOException e){
-            e.printStackTrace();
+    private void uploadFiles(List<File> files) throws IOException {
+        List<GalleryImage> galleryImages = FileUtils.getImagesFromFiles(files);
+        for (GalleryImage image : galleryImages) {
+            imageContainer.addToGallery(image);
+            retrofitController.upload(image);
         }
     }
-    public void handleUploadOnAction(ActionEvent actionEvent) {
+    public void handleUploadOnAction(ActionEvent actionEvent) throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(primaryStage);
@@ -90,7 +83,7 @@ public class GalleryViewController {
         uploadFiles(files);
     }
 
-    public void handleDragDropped(DragEvent dragEvent) {
+    public void handleDragDropped(DragEvent dragEvent) throws IOException {
         uploadFiles(dragEvent.getDragboard().getFiles());
     }
 

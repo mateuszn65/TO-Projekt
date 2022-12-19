@@ -8,6 +8,8 @@ import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
 import com.google.common.primitives.Bytes;
 import javafx.scene.image.Image;
+import org.apache.commons.codec.binary.Base64;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -25,12 +27,20 @@ public class RetrofitController {
             if (galleryImage.getImageData().isEmpty()) {
                 throw new RuntimeException("Upload unsuccessfull - no image data found");
             }
-            List<Byte> bytes = Bytes.asList(galleryImage.getImageData().get());
-            Call<Integer> call = galleryService.postImage(bytes, galleryImage.getName());
+            JSONObject data = prepareRequestBody(galleryImage.getImageData().get(), galleryImage.getName());
+            Call<Integer> call = galleryService.postImage(data);
             call.enqueue(new UploadHandler(galleryImage, this));
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private JSONObject prepareRequestBody(byte[] bytes, String name) {
+        JSONObject data = new JSONObject();
+        String encodedStr = Base64.encodeBase64String(bytes);
+        data.append("bytes", encodedStr);
+        data.append("name", name);
+        return data;
     }
 
     public void getMiniature(GalleryImage galleryImage){

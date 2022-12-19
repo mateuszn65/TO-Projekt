@@ -2,6 +2,9 @@ package agh.oop.backend.controllers;
 
 
 import agh.oop.backend.services.gallery.GalleryService;
+import com.google.common.primitives.Bytes;
+import org.apache.commons.codec.binary.Base64;
+import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +22,20 @@ public class GalleryController {
         this.galleryService = galleryService;
     }
 
-    @RequestMapping(value = "/{name}", method = RequestMethod.POST)
-    public ResponseEntity<Integer> postImage(@RequestBody List<Byte> imageData, @PathVariable String name) {
-        int id = galleryService.upload(imageData, name);
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public ResponseEntity<Integer> postImage(@RequestBody JSONObject imgData) {
+
+        String bytesStr = imgData.getString("bytes");
+        String imgName = imgData.getString("name");
+        List<Byte> listOfBytes = Bytes.asList(Base64.decodeBase64(bytesStr));
+        int id = galleryService.upload(listOfBytes, imgName);
         if (id != -1)
             return ResponseEntity.ok().body(id);
         return ResponseEntity.status(500).body(id);
     }
 
-    @RequestMapping(value = "/miniatures/{id}?width=X&height=Y.", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Byte>> getMiniature(@PathVariable int id, @RequestParam int width, @RequestParam int height){
+    @RequestMapping(value = "/miniatures/{id}/{width}/{height}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Byte>> getMiniature(@PathVariable int id, @PathVariable int width, @PathVariable int height){
         try {
             List<Byte> bytes = galleryService.getMiniature(id, width, height);
             if (bytes != null){
