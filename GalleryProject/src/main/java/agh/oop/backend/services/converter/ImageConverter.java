@@ -11,16 +11,18 @@ import java.io.IOException;
 public class ImageConverter implements Runnable{
     private int id;
     private byte[] img;
-    private int dest_width;
-    private int dest_height;
+    private int destWidth;
+    private int destHeight;
     private ImageConverterService imageConverterService;
 
+    private static final String OUTPUT_FORMAT = "JPEG";
 
-    public ImageConverter(int id, byte[] img, int dest_width, int dest_height) {
+
+    public ImageConverter(int id, byte[] img, int destWidth, int destHeight) {
         this.id = id;
         this.img = img;
-        this.dest_width = dest_width;
-        this.dest_height = dest_height;
+        this.destWidth = destWidth;
+        this.destHeight = destHeight;
     }
 
     public void setImageConverterService(ImageConverterService imageConverterService) {
@@ -35,8 +37,8 @@ public class ImageConverter implements Runnable{
             ByteArrayInputStream is = new ByteArrayInputStream(img);
             BufferedImage bufferedImage = ImageIO.read(is);
             Thumbnails.of(bufferedImage)
-                    .forceSize(dest_width, dest_height)
-                    .outputFormat("JPEG")
+                    .forceSize(destWidth, destHeight)
+                    .outputFormat(OUTPUT_FORMAT)
                     .outputQuality(1)
                     .toOutputStream(outputStream);
             byte[] data = outputStream.toByteArray();

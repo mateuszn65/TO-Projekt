@@ -12,7 +12,7 @@ public class GalleryImage {
     public static int miniWidth = 160;
     public static int miniHeight = 100;
     private String name;
-    private int id;
+    private Integer id;
     private final ObjectProperty<ImageStatus> imageStatusObjectProperty;
 
     private Image miniImage;
@@ -23,15 +23,19 @@ public class GalleryImage {
     }
 
     public GalleryImage(String name, byte[] imageData){
-        this.imageData = imageData;
-        this.name = name;
-        this.imageStatusObjectProperty = new SimpleObjectProperty<>(ImageStatus.UPLOADING);
+        this(null, name, imageData);
     }
-    public GalleryImage(int id, String name){
+
+    public GalleryImage(Integer id, String name){
+        this(id, name, null);
+    }
+    private GalleryImage(Integer id, String name, byte[] imageData) {
         this.id = id;
         this.name = name;
+        this.imageData = imageData;
         this.imageStatusObjectProperty = new SimpleObjectProperty<>(ImageStatus.UPLOADING);
     }
+
     public String getName() {
         return name;
     }

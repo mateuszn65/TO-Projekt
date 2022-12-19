@@ -1,7 +1,5 @@
 package agh.oop.backend.services.converter;
-
-import agh.oop.backend.persistence.GalleryRepository;
-import agh.oop.backend.persistence.OriginalImagesFileRepository;
+;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
