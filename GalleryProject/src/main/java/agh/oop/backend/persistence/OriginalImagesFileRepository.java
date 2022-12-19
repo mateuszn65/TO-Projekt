@@ -15,10 +15,12 @@ public class OriginalImagesFileRepository {
     @Value("${gallery.app.storage.path}")
     private String resourcesPath;
 
+    public static final String IMG_FILETYPE = "png";
+
     public List<Byte> getImageData(String filename) throws IOException {
         BufferedImage bufferedImage = ImageIO.read(new File(resourcesPath + filename));
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
+        ImageIO.write(bufferedImage, IMG_FILETYPE, byteArrayOutputStream);
 
         byte[] buffer = byteArrayOutputStream.toByteArray();
         List<Byte> res = Bytes.asList(buffer);
@@ -31,7 +33,7 @@ public class OriginalImagesFileRepository {
             byte[] imageData = Bytes.toArray(listImageData);
             ByteArrayInputStream bis = new ByteArrayInputStream(imageData);
             BufferedImage bufferedImage = ImageIO.read(bis);
-            ImageIO.write(bufferedImage, "png", new File( resourcesPath + filename));
+            ImageIO.write(bufferedImage, IMG_FILETYPE, new File( resourcesPath + filename));
             return true;
         }catch (IOException e){
             return false;
