@@ -1,6 +1,8 @@
 package agh.oop.backend.persistence;
 
 import com.google.common.primitives.Bytes;
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -10,7 +12,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class OriginalImagesFileRepository {
-    private final String resourcesPath = "src/main/resources/Storage/";
+    @Value("${gallery.app.storage.path}")
+    private String resourcesPath;
 
     public List<Byte> getImageData(String filename) throws IOException {
         BufferedImage bufferedImage = ImageIO.read(new File(resourcesPath + filename));
