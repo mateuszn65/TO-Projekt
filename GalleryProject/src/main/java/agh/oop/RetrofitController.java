@@ -1,15 +1,14 @@
 package agh.oop;
 
 import agh.oop.backend.services.gallery.IGalleryService;
+import agh.oop.gallery.handlers.GetMiniatureHandler;
+import agh.oop.gallery.handlers.InitModelHandler;
+import agh.oop.gallery.handlers.UploadHandler;
 import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
-import agh.oop.gallery.model.ImageStatus;
 import com.google.common.primitives.Bytes;
-import javafx.application.Platform;
 import javafx.scene.image.Image;
-import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 
@@ -23,105 +22,33 @@ public class RetrofitController {
 
     public void upload(GalleryImage galleryImage){
         try {
-            List<Byte> bytes = Bytes.asList(galleryImage.getImageData());
+            if (galleryImage.getImageData().isEmpty()) {
+                throw new RuntimeException("Upload unsuccessfull - no image data found");
+            }
+            List<Byte> bytes = Bytes.asList(galleryImage.getImageData().get());
             Call<Integer> call = galleryService.postImage(bytes, galleryImage.getName());
-            call.enqueue(new Callback<Integer>() {
-            @Override
-            public void onResponse(@NotNull Call<Integer> call, @NotNull Response<Integer> response) {
-                if(response.isSuccessful()) {
-                    if(response.body() != null) {
-                        throw new RuntimeException("Server returned response with empty body");
-                    }
-                    int id = response.body();
-                    galleryImage.setId(id);
-                    getMiniature(galleryImage);
-                } else {
-                    System.out.println(response.errorBody());
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<Integer> call, @NotNull Throwable t) {
-                t.printStackTrace();
-            }
-        });
+            call.enqueue(new UploadHandler(galleryImage, this));
         }catch (Exception e){
-            e.getCause();
             e.printStackTrace();
         }
     }
 
-    private void receivedMiniature(@NotNull Response<List<Byte>> response, GalleryImage galleryImage) {
-        if(response.isSuccessful()) {
-            if(response.body() != null) {
-                throw new RuntimeException("Server returned response with empty body");
-            }
-            byte[] buffer = Bytes.toArray(response.body());
-            galleryImage.setMiniImage(buffer);
-            Platform.runLater(()->{
-                galleryImage.setImageStatusProperty(ImageStatus.RECEIVED);
-            });
-        } else {
-            System.out.println(response.errorBody());
-        }
-    }
-
     public void getMiniature(GalleryImage galleryImage){
-        Call<List<Byte>> call = galleryService.getImageMiniature(galleryImage.getId(), GalleryImage.miniWidth, GalleryImage.miniHeight);
-        call.enqueue(new Callback<List<Byte>>() {
-            @Override
-            public void onResponse(@NotNull Call<List<Byte>> call, @NotNull Response<List<Byte>> response) {
-                if (response.code() == 202){
-                    Platform.runLater(()->{
-                        galleryImage.setImageStatusProperty(ImageStatus.LOADING);
-                    });
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    getMiniature(galleryImage);
-                }else receivedMiniature(response, galleryImage);
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<List<Byte>> call, @NotNull Throwable t) {
-                t.printStackTrace();
-            }
-        });
+        Call<List<Byte>> call = galleryService.getImageMiniature(galleryImage.getId(), GalleryImage.miniatureWidth, GalleryImage.miniatureHeight);
+        call.enqueue(new GetMiniatureHandler(galleryImage, this));
     }
 
     public void initModel(ImageContainer imageContainer){
         Call<Map<Integer, String>> call = galleryService.getInitialImages();
-        call.enqueue(new Callback<Map<Integer, String>>() {
-            @Override
-            public void onResponse(@NotNull Call<Map<Integer, String>> call, @NotNull Response<Map<Integer, String>> response) {
-                if(response.isSuccessful()){
-                    if(response.body() != null) {
-                        throw new RuntimeException("Server returned response with empty body");
-                    }
-                    Map<Integer, String> map = response.body();
-                    map.forEach((id, filename)->{
-                        GalleryImage galleryImage = new GalleryImage(id, filename);
-                        imageContainer.addToGallery(galleryImage);
-                        getMiniature(galleryImage);
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<Map<Integer, String>> call, @NotNull Throwable t) {
-                t.printStackTrace();
-            }
-        });
+        call.enqueue(new InitModelHandler(imageContainer, this));
     }
 
     public Image getPlaceholder() throws IOException {
         Response<List<Byte>> response = galleryService.getImagePlaceholder().execute();
         if (!response.isSuccessful()){
-            throw new RuntimeException();
+            throw new RuntimeException("Request was processed unsuccessfully");
         }
-        if(response.body() != null) {
+        if(response.body() == null) {
             throw new RuntimeException("Server returned response with empty body");
         }
         byte[] buffer = Bytes.toArray(response.body());
@@ -130,9 +57,9 @@ public class RetrofitController {
     public Image getOriginalImage(int id) throws IOException {
         Response<List<Byte>> response = galleryService.getOriginalImage(id).execute();
         if (!response.isSuccessful()){
-            throw new RuntimeException();
+            throw new RuntimeException("Request was processed unsuccessfully");
         }
-        if(response.body() != null) {
+        if(response.body() == null) {
             throw new RuntimeException("Server returned response with empty body");
         }
         byte[] buffer = Bytes.toArray(response.body());

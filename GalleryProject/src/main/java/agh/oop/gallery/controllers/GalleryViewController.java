@@ -3,7 +3,9 @@ import agh.oop.RetrofitController;
 import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
 import agh.oop.gallery.model.ImageStatus;
+import agh.oop.gallery.view.GalleryCellFactory;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,13 +41,16 @@ public class GalleryViewController {
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-                Platform.exit();
-                System.exit(0);
-            }
+        this.primaryStage.setOnCloseRequest(t -> {
+            Platform.exit();
+            System.exit(0);
         });
+    }
+
+    private void prepareGridView(int cellHeight, int cellWidth, ObservableList<GalleryImage> images) {
+        imagesGridView.setCellHeight(cellHeight);
+        imagesGridView.setCellWidth(cellWidth);
+        imagesGridView.setItems(images);
     }
 
 
@@ -55,65 +60,11 @@ public class GalleryViewController {
         retrofitController = new RetrofitController();
         retrofitController.initModel(imageContainer);
         placeholder = retrofitController.getPlaceholder();
-
-        imagesGridView.setCellHeight(GalleryImage.miniHeight);
-        imagesGridView.setCellWidth(GalleryImage.miniWidth);
-        imagesGridView.setItems(imageContainer.getGallery());
-
-        imagesGridView.setCellFactory(new Callback<>() {
-            @Override
-            public GridCell<GalleryImage> call(GridView<GalleryImage> param) {
-                GridCell<GalleryImage> gridCell =  new GridCell<>() {
-                    @Override
-                    protected void updateItem(GalleryImage item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item.getImageStatus() == ImageStatus.UPLOADING) {
-                            setGraphic(null);
-                            return;
-                        }
-
-                        ImageView photoIcon = new ImageView();
-                        photoIcon.setPreserveRatio(true);
-                        photoIcon.setFitHeight(imagesGridView.getCellHeight());
-                        photoIcon.setFitWidth(imagesGridView.getCellWidth());
-
-                        if (item.getImageStatus() == ImageStatus.RECEIVED){
-                            photoIcon.imageProperty().set(item.getMiniImage());
-                            setGraphic(photoIcon);
-                        } else if (item.getImageStatus() == ImageStatus.LOADING) {
-                            photoIcon.imageProperty().set(placeholder);
-                            setGraphic(photoIcon);
-                        }
-
-                    }
-                };
-                gridCell.setOnMouseClicked(event -> {
-                    if (gridCell.getItem() != null) {
-                        try {
-                            showPreview(gridCell.getItem());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
-                return gridCell;
-            }
-        });
+        prepareGridView(GalleryImage.miniatureHeight, GalleryImage.miniatureWidth, imageContainer.getGallery());
+        imagesGridView.setCellFactory(new GalleryCellFactory(GalleryImage.miniatureHeight, GalleryImage.miniatureWidth, placeholder, primaryStage, retrofitController));
     }
-    public void showPreview(GalleryImage galleryImage) throws IOException {
-        Stage previewStage = new Stage();
-        previewStage.setTitle(galleryImage.getName());
-        previewStage.initModality(Modality.WINDOW_MODAL);
-        previewStage.initOwner(primaryStage);
 
-        Pane pane = new Pane();
-        ImageView imageView = new ImageView(retrofitController.getOriginalImage(galleryImage.getId()));
-        pane.getChildren().add(imageView);
 
-        Scene scene = new Scene(pane);
-        previewStage.setScene(scene);
-        previewStage.showAndWait();
-    }
     private void uploadFiles(List<File> files){
         try {
             List<GalleryImage> galleryImages;

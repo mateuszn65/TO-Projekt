@@ -7,20 +7,16 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 
 import java.io.ByteArrayInputStream;
+import java.util.Optional;
 
 public class GalleryImage {
-    public static int miniWidth = 160;
-    public static int miniHeight = 100;
+    public static int miniatureWidth = 160;
+    public static int miniatureHeight = 100;
     private String name;
     private Integer id;
     private final ObjectProperty<ImageStatus> imageStatusObjectProperty;
-
     private Image miniImage;
     private byte[] imageData;
-
-    public byte[] getImageData() {
-        return imageData;
-    }
 
     public GalleryImage(String name, byte[] imageData){
         this(null, name, imageData);
@@ -34,6 +30,10 @@ public class GalleryImage {
         this.name = name;
         this.imageData = imageData;
         this.imageStatusObjectProperty = new SimpleObjectProperty<>(ImageStatus.UPLOADING);
+    }
+
+    public Optional<byte[]> getImageData() {
+        return Optional.of(imageData);
     }
 
     public String getName() {

@@ -27,8 +27,8 @@ public class GalleryController {
         return ResponseEntity.status(500).body(id);
     }
 
-    @RequestMapping(value = "/miniatures/{id}/{width}/{height}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Byte>> getMiniature(@PathVariable int id, @PathVariable int width, @PathVariable int height){
+    @RequestMapping(value = "/miniatures/{id}?width=X&height=Y.", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Byte>> getMiniature(@PathVariable int id, @RequestParam int width, @RequestParam int height){
         try {
             List<Byte> bytes = galleryService.getMiniature(id, width, height);
             if (bytes != null){

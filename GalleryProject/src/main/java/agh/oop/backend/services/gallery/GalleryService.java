@@ -41,8 +41,9 @@ public class GalleryService{
 
     public List<Byte> getMiniature(int id, int width, int height) throws IOException {
         Optional<ImageDescriptor> imageDescriptor = repository.findById(id);
-        if (imageDescriptor.isEmpty())
+        if (imageDescriptor.isEmpty()) {
             return null;
+        }
 
         ImageDescriptor image = imageDescriptor.get();
 
