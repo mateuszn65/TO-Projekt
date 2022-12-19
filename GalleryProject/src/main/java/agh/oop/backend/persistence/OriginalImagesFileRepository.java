@@ -2,6 +2,7 @@ package agh.oop.backend.persistence;
 
 import com.google.common.primitives.Bytes;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+@Component
 public class OriginalImagesFileRepository {
     @Value("${gallery.app.storage.path}")
     private String resourcesPath;

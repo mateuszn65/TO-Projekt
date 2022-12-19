@@ -5,10 +5,12 @@ import agh.oop.backend.persistence.OriginalImagesFileRepository;
 import agh.oop.backend.model.ImageDescriptor;
 import agh.oop.backend.model.ImageDescriptorStatus;
 import com.google.common.primitives.Bytes;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.util.Optional;
 
-
+@Service
 public class ImageConverterService {
     private GalleryRepository repository;
     private ImageConverterQueue queue;

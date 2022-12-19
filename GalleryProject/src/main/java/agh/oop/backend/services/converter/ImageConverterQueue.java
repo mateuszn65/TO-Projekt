@@ -1,9 +1,12 @@
 package agh.oop.backend.services.converter;
 
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ImageConverterQueue {
     private List<ConverterQueueSubscriber> subscribers = new ArrayList<>();
 
