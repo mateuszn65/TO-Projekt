@@ -29,7 +29,9 @@ public class RetrofitController {
             @Override
             public void onResponse(@NotNull Call<Integer> call, @NotNull Response<Integer> response) {
                 if(response.isSuccessful()) {
-                    assert response.body() != null;
+                    if(response.body() != null) {
+                        throw new RuntimeException("Server returned response with empty body");
+                    }
                     int id = response.body();
                     galleryImage.setId(id);
                     getMiniature(galleryImage);
@@ -51,7 +53,9 @@ public class RetrofitController {
 
     private void receivedMiniature(@NotNull Response<List<Byte>> response, GalleryImage galleryImage) {
         if(response.isSuccessful()) {
-            assert response.body() != null;
+            if(response.body() != null) {
+                throw new RuntimeException("Server returned response with empty body");
+            }
             byte[] buffer = Bytes.toArray(response.body());
             galleryImage.setMiniImage(buffer);
             Platform.runLater(()->{
@@ -93,7 +97,9 @@ public class RetrofitController {
             @Override
             public void onResponse(@NotNull Call<Map<Integer, String>> call, @NotNull Response<Map<Integer, String>> response) {
                 if(response.isSuccessful()){
-                    assert response.body() != null;
+                    if(response.body() != null) {
+                        throw new RuntimeException("Server returned response with empty body");
+                    }
                     Map<Integer, String> map = response.body();
                     map.forEach((id, filename)->{
                         GalleryImage galleryImage = new GalleryImage(id, filename);
@@ -115,7 +121,9 @@ public class RetrofitController {
         if (!response.isSuccessful()){
             throw new RuntimeException();
         }
-        assert response.body() != null;
+        if(response.body() != null) {
+            throw new RuntimeException("Server returned response with empty body");
+        }
         byte[] buffer = Bytes.toArray(response.body());
         return new Image(new ByteArrayInputStream(buffer));
     }
@@ -124,7 +132,9 @@ public class RetrofitController {
         if (!response.isSuccessful()){
             throw new RuntimeException();
         }
-        assert response.body() != null;
+        if(response.body() != null) {
+            throw new RuntimeException("Server returned response with empty body");
+        }
         byte[] buffer = Bytes.toArray(response.body());
         return new Image(new ByteArrayInputStream(buffer));
     }
