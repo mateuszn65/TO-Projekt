@@ -29,3 +29,11 @@ Refaktoryzacja kodu
 ### 16.12.2022
 
 Refaktoryzacja
+
+### 19.12.2022
+
+Refaktoryzacja kodu
+
+### 20.12.2022
+
+Refaktoryzacja, dodanie gitignore, posprzątanie repozytorium, niewielkie zmiany w strukturach zapytan http
