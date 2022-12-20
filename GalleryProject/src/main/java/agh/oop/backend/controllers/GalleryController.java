@@ -3,6 +3,7 @@ package agh.oop.backend.controllers;
 
 import agh.oop.backend.services.gallery.GalleryService;
 import com.google.common.primitives.Bytes;
+import com.google.gson.JsonObject;
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
@@ -23,10 +24,9 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ResponseEntity<Integer> postImage(@RequestBody JSONObject imgData) {
-
-        String bytesStr = imgData.getString("bytes");
-        String imgName = imgData.getString("name");
+    public ResponseEntity<Integer> postImage(@RequestBody Map<String, String> imgData) {
+        String bytesStr = imgData.get("bytes");
+        String imgName = imgData.get("name");
         List<Byte> listOfBytes = Bytes.asList(Base64.decodeBase64(bytesStr));
         int id = galleryService.upload(listOfBytes, imgName);
         if (id != -1)

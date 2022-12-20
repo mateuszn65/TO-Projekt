@@ -1,5 +1,6 @@
 package agh.oop.backend.services.gallery;
 
+import com.google.gson.JsonObject;
 import org.json.JSONObject;
 import org.springframework.data.repository.query.Param;
 import retrofit2.Call;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 public interface IGalleryService {
     @POST("/images/upload")
-    Call<Integer> postImage(@Body JSONObject imageData);
+    Call<Integer> postImage(@Body Map<String, String> imageData);
     @GET("/images/miniatures/{id}/{width}/{height}")
     Call<List<Byte>> getImageMiniature(@Path("id") int id, @Path("width") int width, @Path("height") int height);
     @GET("/images/miniatures/placeholder")
