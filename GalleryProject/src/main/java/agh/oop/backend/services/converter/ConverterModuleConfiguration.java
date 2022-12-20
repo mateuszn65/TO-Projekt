@@ -1,5 +1,5 @@
 package agh.oop.backend.services.converter;
-;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

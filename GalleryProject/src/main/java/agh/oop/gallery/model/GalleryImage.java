@@ -1,11 +1,9 @@
 package agh.oop.gallery.model;
 
 
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
-
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
 

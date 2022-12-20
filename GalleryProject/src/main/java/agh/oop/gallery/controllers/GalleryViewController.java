@@ -2,35 +2,20 @@ package agh.oop.gallery.controllers;
 import agh.oop.RetrofitController;
 import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
-import agh.oop.gallery.model.ImageStatus;
 import agh.oop.gallery.view.GalleryCellFactory;
 import agh.oop.utils.FileUtils;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import javafx.util.Callback;
-import org.aspectj.util.FileUtil;
-import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
 import java.io.*;
 import java.util.List;
-import java.util.zip.ZipFile;
-
-import static agh.oop.utils.GalleryImageUtils.getFilesContent;
-import static agh.oop.utils.ZipUtils.isZip;
-import static agh.oop.utils.ZipUtils.unzipImages;
 
 public class GalleryViewController {
     @FXML

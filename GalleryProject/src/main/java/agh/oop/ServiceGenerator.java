@@ -1,7 +1,5 @@
 package agh.oop;
 
-
-
 import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

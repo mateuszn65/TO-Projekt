@@ -12,9 +12,9 @@ import java.util.Optional;
 
 @Service
 public class ImageConverterService {
-    private GalleryRepository repository;
-    private ImageConverterQueue queue;
-    private OriginalImagesFileRepository originalRepository;
+    private final GalleryRepository repository;
+    private final ImageConverterQueue queue;
+    private final OriginalImagesFileRepository originalRepository;
 
     public ImageConverterService(GalleryRepository repository,
                                  ImageConverterQueue queue,

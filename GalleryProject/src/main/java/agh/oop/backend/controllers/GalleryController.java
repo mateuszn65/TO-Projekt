@@ -3,13 +3,10 @@ package agh.oop.backend.controllers;
 
 import agh.oop.backend.services.gallery.GalleryService;
 import com.google.common.primitives.Bytes;
-import com.google.gson.JsonObject;
 import org.apache.commons.codec.binary.Base64;
-import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 

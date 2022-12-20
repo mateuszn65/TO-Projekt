@@ -9,10 +9,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class ImageConverter implements Runnable{
-    private int id;
-    private byte[] img;
-    private int destWidth;
-    private int destHeight;
+    private final int id;
+    private final byte[] img;
+    private final int destWidth;
+    private final int destHeight;
     private ImageConverterService imageConverterService;
 
     private static final String OUTPUT_FORMAT = "JPEG";

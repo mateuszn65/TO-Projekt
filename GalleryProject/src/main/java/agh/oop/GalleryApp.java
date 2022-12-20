@@ -27,8 +27,6 @@ public class GalleryApp extends Application {
         var scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Gallery app");
-//        primaryStage.minWidthProperty().bind(rootLayout.minWidthProperty());
-//        primaryStage.minHeightProperty().bind(rootLayout.minHeightProperty());
     }
     public static void main(String[] args){
         launch(args);

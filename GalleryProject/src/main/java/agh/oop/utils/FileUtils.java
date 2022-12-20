@@ -13,7 +13,7 @@ import static agh.oop.utils.ZipUtils.isZip;
 import static agh.oop.utils.ZipUtils.unzipImages;
 
 public class FileUtils {
-    public static boolean isImage(byte[] imageData) throws IOException {
+    public static boolean isImage(byte[] imageData) {
         Tika tika = new Tika();
         String fileType = tika.detect(imageData);
         return fileType.startsWith("image");

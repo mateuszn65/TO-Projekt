@@ -8,7 +8,7 @@ import java.util.List;
 
 @Component
 public class ImageConverterQueue {
-    private List<ConverterQueueSubscriber> subscribers = new ArrayList<>();
+    private final List<ConverterQueueSubscriber> subscribers = new ArrayList<>();
 
     private void notifySubscribers(ImageConverter converter) {
         for(ConverterQueueSubscriber subscriber : subscribers) {

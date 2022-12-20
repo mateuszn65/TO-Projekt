@@ -7,12 +7,8 @@ import agh.oop.gallery.handlers.UploadHandler;
 import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
 import com.google.common.primitives.Bytes;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import javafx.scene.image.Image;
 import org.apache.commons.codec.binary.Base64;
-import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Response;
 
