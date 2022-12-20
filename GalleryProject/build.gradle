@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.google.guava:guava:31.1-jre'
     implementation 'org.controlsfx:controlsfx:11.1.2'
     implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.17'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.6'
 }
 
 
