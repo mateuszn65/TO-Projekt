@@ -14,8 +14,8 @@ import java.util.Map;
 public interface IGalleryService {
     @POST("/images/upload")
     Call<Integer> postImage(@Body Map<String, String> imageData);
-    @GET("/images/miniatures/{id}/{width}/{height}")
-    Call<List<Byte>> getImageMiniature(@Path("id") int id, @Path("width") int width, @Path("height") int height);
+    @GET("/images/miniatures/{id}")
+    Call<List<Byte>> getImageMiniature(@Path("id") int id, @Query("width") int width, @Query("height") int height);
     @GET("/images/miniatures/placeholder")
     Call<List<Byte>> getImagePlaceholder();
     @GET("/images/{id}")
