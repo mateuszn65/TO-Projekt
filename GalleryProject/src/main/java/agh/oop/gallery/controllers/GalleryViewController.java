@@ -43,12 +43,16 @@ public class GalleryViewController {
 
     @FXML
     public void initialize() throws IOException {
-        imageContainer = new ImageContainer();
+        initialize(GalleryImage.smallMiniatureWidth, GalleryImage.smallMiniatureHeight);
+    }
+
+    public void initialize(int miniatureWidth, int miniatureHeight) throws IOException {
+        imageContainer = new ImageContainer(miniatureWidth, miniatureHeight);
         retrofitController = new RetrofitController();
-        retrofitController.initModel(imageContainer);
+        retrofitController.initModel(imageContainer, miniatureWidth, miniatureHeight);
         placeholder = retrofitController.getPlaceholder();
-        prepareGridView(GalleryImage.miniatureHeight, GalleryImage.miniatureWidth, imageContainer.getGallery());
-        imagesGridView.setCellFactory(new GalleryCellFactory(GalleryImage.miniatureHeight, GalleryImage.miniatureWidth, placeholder, primaryStage, retrofitController));
+        prepareGridView(miniatureHeight, miniatureWidth, imageContainer.getGallery());
+        imagesGridView.setCellFactory(new GalleryCellFactory(miniatureHeight, miniatureWidth, placeholder, primaryStage, retrofitController));
     }
 
 
@@ -56,7 +60,7 @@ public class GalleryViewController {
         List<GalleryImage> galleryImages = FileUtils.getImagesFromFiles(files);
         for (GalleryImage image : galleryImages) {
             imageContainer.addToGallery(image);
-            retrofitController.upload(image);
+            retrofitController.upload(image, imageContainer.getMiniatureWidth(), imageContainer.getMiniatureHeight());
         }
     }
     public void handleUploadOnAction(ActionEvent actionEvent) throws IOException {
@@ -78,4 +82,30 @@ public class GalleryViewController {
         }
     }
 
+    public void setSmallMiniatures(ActionEvent actionEvent) {
+        imageContainer.setMiniatureWidth(GalleryImage.smallMiniatureWidth);
+        imageContainer.setMiniatureHeight(GalleryImage.smallMiniatureHeight);
+        resetImages();
+    }
+
+    public void setMediumMiniatures(ActionEvent actionEvent) {
+        imageContainer.setMiniatureWidth(GalleryImage.mediumMiniatureWidth);
+        imageContainer.setMiniatureHeight(GalleryImage.mediumMiniatureHeight);
+        resetImages();
+    }
+
+    public void setBigMiniatures(ActionEvent actionEvent) {
+        imageContainer.setMiniatureWidth(GalleryImage.bigMiniatureWidth);
+        imageContainer.setMiniatureHeight(GalleryImage.bigMiniatureHeight);
+        resetImages();
+    }
+
+    private void resetImages() {
+        int miniatureHeight = imageContainer.getMiniatureHeight();
+        int miniatureWidth = imageContainer.getMiniatureWidth();
+        imageContainer.getGallery().forEach(img -> retrofitController.getMiniature(img, miniatureWidth, miniatureHeight));
+        prepareGridView(miniatureHeight, miniatureWidth, imageContainer.getGallery());
+        imagesGridView.setCellFactory(new GalleryCellFactory(miniatureHeight, miniatureWidth, placeholder, primaryStage, retrofitController));
+
+    }
 }

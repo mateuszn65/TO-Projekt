@@ -16,11 +16,15 @@ public class GetMiniatureHandler implements Callback<List<Byte>> {
 
     private final GalleryImage galleryImage;
     private final RetrofitController retrofitController;
+    private final int miniatureWidth;
+    private final int miniatureHeight;
 
 
-    public GetMiniatureHandler(GalleryImage galleryImage, RetrofitController retrofitController) {
+    public GetMiniatureHandler(GalleryImage galleryImage, RetrofitController retrofitController, int miniatureWidth, int miniatureHeight) {
         this.galleryImage = galleryImage;
         this.retrofitController = retrofitController;
+        this.miniatureHeight = miniatureHeight;
+        this.miniatureWidth = miniatureWidth;
     }
 
     @Override
@@ -32,7 +36,7 @@ public class GetMiniatureHandler implements Callback<List<Byte>> {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            retrofitController.getMiniature(galleryImage);
+            retrofitController.getMiniature(galleryImage, miniatureWidth, miniatureHeight);
         } else if (response.isSuccessful()) {
             if(response.body() == null) {
                 throw new RuntimeException("Server returned response with empty body");

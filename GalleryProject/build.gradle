@@ -44,6 +44,10 @@ dependencies {
     implementation 'org.controlsfx:controlsfx:11.1.2'
     implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.17'
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.6'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
 

@@ -15,7 +15,7 @@ public class ImageConverter implements Runnable{
     private final int destHeight;
     private ImageConverterService imageConverterService;
 
-    private static final String OUTPUT_FORMAT = "JPEG";
+    public static final String OUTPUT_FORMAT = "JPEG";
 
 
     public ImageConverter(int id, byte[] img, int destWidth, int destHeight) {
@@ -43,7 +43,7 @@ public class ImageConverter implements Runnable{
                     .toOutputStream(outputStream);
             byte[] data = outputStream.toByteArray();
 
-            imageConverterService.notifyConverted(id, data);
+            imageConverterService.notifyConverted(id, data, destWidth, destHeight);
         } catch (IOException e) {
             e.printStackTrace();
         }

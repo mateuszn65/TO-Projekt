@@ -10,10 +10,14 @@ import retrofit2.Response;
 public class UploadHandler implements Callback<Integer> {
     private final GalleryImage galleryImage;
     private final RetrofitController retrofitController;
+    private final int miniatureWidth;
+    private final int miniatureHeight;
 
-    public UploadHandler(GalleryImage galleryImage, RetrofitController retrofitController) {
+    public UploadHandler(GalleryImage galleryImage, RetrofitController retrofitController, int miniatureWidth, int miniatureHeight) {
         this.galleryImage = galleryImage;
         this.retrofitController = retrofitController;
+        this.miniatureHeight = miniatureHeight;
+        this.miniatureWidth = miniatureWidth;
     }
 
     @Override
@@ -24,7 +28,7 @@ public class UploadHandler implements Callback<Integer> {
             }
             int id = response.body();
             galleryImage.setId(id);
-            retrofitController.getMiniature(galleryImage);
+            retrofitController.getMiniature(galleryImage, miniatureWidth, miniatureHeight);
         } else {
             throw new RuntimeException("Request was processed unsuccessfully");
         }

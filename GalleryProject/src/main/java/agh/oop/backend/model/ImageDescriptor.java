@@ -1,5 +1,7 @@
 package agh.oop.backend.model;
 
+import agh.oop.backend.utils.LabelMapper;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,13 +11,20 @@ public class ImageDescriptor {
     private int id;
     private String filename;
     @Enumerated(EnumType.STRING)
-    private ImageDescriptorStatus imageStatus;
+    private ImageDescriptorStatus imageStatusSmall;
+    @Enumerated(EnumType.STRING)
+    private ImageDescriptorStatus imageStatusMedium;
+    @Enumerated(EnumType.STRING)
+    private ImageDescriptorStatus imageStatusBig;
+
 
     public ImageDescriptor(){}
 
-    public ImageDescriptor(String filename, ImageDescriptorStatus imageStatus) {
+    public ImageDescriptor(String filename, ImageDescriptorStatus imageStatusSmall, ImageDescriptorStatus imageStatusMedium, ImageDescriptorStatus imageStatusBig) {
         this.filename = filename;
-        this.imageStatus = imageStatus;
+        this.imageStatusSmall = imageStatusSmall;
+        this.imageStatusMedium = imageStatusMedium;
+        this.imageStatusBig = imageStatusBig;
     }
 
     public int getId() {
@@ -33,12 +42,44 @@ public class ImageDescriptor {
     public void setFilename(String filename) {
         this.filename = filename;
     }
-    public ImageDescriptorStatus getImageStatus() {
-        return imageStatus;
+
+    public ImageDescriptorStatus getImageStatusSmall() {
+        return imageStatusSmall;
     }
 
-    public void setImageStatus(ImageDescriptorStatus imageStatus) {
-        this.imageStatus = imageStatus;
+    public void setImageStatusSmall(ImageDescriptorStatus imageStatusSmall) {
+        this.imageStatusSmall = imageStatusSmall;
     }
 
+    public ImageDescriptorStatus getImageStatusMedium() {
+        return imageStatusMedium;
+    }
+
+    public void setImageStatusMedium(ImageDescriptorStatus imageStatusMedium) {
+        this.imageStatusMedium = imageStatusMedium;
+    }
+
+    public ImageDescriptorStatus getImageStatusBig() {
+        return imageStatusBig;
+    }
+
+    public void setImageStatusBig(ImageDescriptorStatus imageStatusBig) {
+        this.imageStatusBig = imageStatusBig;
+    }
+
+    public ImageDescriptorStatus getStatusOfMiniature(int width, int height) {
+        return switch (LabelMapper.getLabel(width, height)) {
+            case SMALL -> getImageStatusSmall();
+            case MEDIUM -> getImageStatusMedium();
+            case BIG -> getImageStatusBig();
+        };
+    }
+
+    public void setStatusOfMiniature(int width, int height, ImageDescriptorStatus status) {
+        switch (LabelMapper.getLabel(width, height)) {
+            case SMALL -> setImageStatusSmall(status);
+            case MEDIUM -> setImageStatusMedium(status);
+            case BIG -> setImageStatusBig(status);
+        };
+    }
 }

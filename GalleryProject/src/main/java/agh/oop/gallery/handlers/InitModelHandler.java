@@ -14,10 +14,14 @@ public class InitModelHandler implements Callback<Map<Integer, String>> {
 
     private final ImageContainer imageContainer;
     private final RetrofitController retrofitController;
+    private final int miniatureWidth;
+    private final int miniatureHeight;
 
-    public InitModelHandler(ImageContainer imageContainer, RetrofitController retrofitController) {
+    public InitModelHandler(ImageContainer imageContainer, RetrofitController retrofitController, int miniatureWidth, int miniatureHeight) {
         this.imageContainer = imageContainer;
         this.retrofitController = retrofitController;
+        this.miniatureHeight = miniatureHeight;
+        this.miniatureWidth = miniatureWidth;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class InitModelHandler implements Callback<Map<Integer, String>> {
             map.forEach((id, filename)->{
                 GalleryImage galleryImage = new GalleryImage(id, filename);
                 imageContainer.addToGallery(galleryImage);
-                retrofitController.getMiniature(galleryImage);
+                retrofitController.getMiniature(galleryImage, miniatureWidth, miniatureHeight);
             });
         }
     }

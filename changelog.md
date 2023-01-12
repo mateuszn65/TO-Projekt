@@ -37,3 +37,7 @@ Refaktoryzacja kodu
 ### 20.12.2022
 
 Refaktoryzacja, dodanie gitignore, posprzątanie repozytorium, niewielkie zmiany w strukturach zapytan http
+
+### 12.01.2022
+
+Dodanie obsługi różnych rozmiarów miniatur

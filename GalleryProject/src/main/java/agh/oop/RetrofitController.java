@@ -8,6 +8,7 @@ import agh.oop.gallery.handlers.UploadHandler;
 import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
 import javafx.scene.image.Image;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -18,17 +19,20 @@ import java.util.List;
 import java.util.Map;
 
 
+
+@Slf4j
 public class RetrofitController {
     private final IGalleryService galleryService = ServiceGenerator.createService(IGalleryService.class);
 
-    public void upload(GalleryImage galleryImage){
+    public void upload(GalleryImage galleryImage, int desiredWidth, int desiredHeight){
+        log.info("RetrofitController: uploading image, desired width {}, desired height {}", desiredWidth, desiredHeight);
         try {
             if (galleryImage.getImageData().isEmpty()) {
                 throw new RuntimeException("Upload unsuccessfull - no image data found");
             }
             Map<String, String> data = prepareRequestBody(galleryImage.getImageData().get(), galleryImage.getName());
             Call<Integer> call = galleryService.postImage(data);
-            call.enqueue(new UploadHandler(galleryImage, this));
+            call.enqueue(new UploadHandler(galleryImage, this, desiredWidth, desiredHeight));
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -39,14 +43,16 @@ public class RetrofitController {
         return Map.of("bytes", encodedStr, "name", name);
     }
 
-    public void getMiniature(GalleryImage galleryImage){
-        Call<List<Byte>> call = galleryService.getImageMiniature(galleryImage.getId(), GalleryImage.miniatureWidth, GalleryImage.miniatureHeight);
-        call.enqueue(new GetMiniatureHandler(galleryImage, this));
+    public void getMiniature(GalleryImage galleryImage, int miniatureWidth, int miniatureHeight){
+        log.info("requesting miniature for {} miniatureWidth {}, miniatureHeight {}", galleryImage.getName(), miniatureWidth, miniatureHeight);
+        Call<List<Byte>> call = galleryService.getImageMiniature(galleryImage.getId(), miniatureWidth, miniatureHeight);
+        call.enqueue(new GetMiniatureHandler(galleryImage, this, miniatureWidth, miniatureHeight));
     }
 
-    public void initModel(ImageContainer imageContainer){
+    public void initModel(ImageContainer imageContainer, int miniatureWidth, int miniatureHeight){
+        log.info("Initializing model with {} miniatureWidth, {} miniatureHeight", miniatureWidth, miniatureHeight);
         Call<Map<Integer, String>> call = galleryService.getInitialImages();
-        call.enqueue(new InitModelHandler(imageContainer, this));
+        call.enqueue(new InitModelHandler(imageContainer, this, miniatureWidth, miniatureHeight));
     }
 
     public Image getPlaceholder() throws IOException {
@@ -55,6 +61,7 @@ public class RetrofitController {
     }
 
     public Image getOriginalImage(int id) throws IOException {
+        log.info("Original image with id {} requested", id);
         Response<List<Byte>> response = galleryService.getOriginalImage(id).execute();
         return SyncResponseHandler.getImage(response);
     }

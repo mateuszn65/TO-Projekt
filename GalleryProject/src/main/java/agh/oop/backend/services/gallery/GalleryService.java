@@ -5,6 +5,8 @@ import agh.oop.backend.persistence.OriginalImagesFileRepository;
 import agh.oop.backend.model.ImageDescriptor;
 import agh.oop.backend.model.ImageDescriptorStatus;
 import agh.oop.backend.services.converter.ImageConverterService;
+import agh.oop.backend.utils.FilenameMapper;
+import agh.oop.backend.utils.LabelMapper;
 import com.google.common.primitives.Bytes;
 import java.io.*;
 import java.util.*;
@@ -30,7 +32,7 @@ public class GalleryService{
     }
 
     public int upload(List<Byte> listImageData, String name) {
-        ImageDescriptor imageDescriptor = new ImageDescriptor(name, ImageDescriptorStatus.UPLOADED);
+        ImageDescriptor imageDescriptor = new ImageDescriptor(name, ImageDescriptorStatus.READY, ImageDescriptorStatus.READY, ImageDescriptorStatus.READY);
         int id = repository.save(imageDescriptor).getId();
 
         if (originalRepository.saveImage(listImageData, id + ".png"))
@@ -44,21 +46,21 @@ public class GalleryService{
         if (imageDescriptor.isEmpty()) {
             return null;
         }
-
         ImageDescriptor image = imageDescriptor.get();
 
-        if (image.getImageStatus() == ImageDescriptorStatus.FINISHED){
-            return originalRepository.getImageData(image.getId() + "m.png");
+        if (image.getStatusOfMiniature(width, height) == ImageDescriptorStatus.FINISHED){
+            return originalRepository.getImageData(FilenameMapper.getFilename(id, width, height));
         }
 
-        if (image.getImageStatus() == ImageDescriptorStatus.UPLOADED){
-            image.setImageStatus(ImageDescriptorStatus.CONVERTING);
+        if (image.getStatusOfMiniature(width, height) == ImageDescriptorStatus.READY){
+            image.setStatusOfMiniature(width, height, ImageDescriptorStatus.CONVERTING);
             repository.save(image);
             imageConverterService.convert(image.getId(), Bytes.toArray(originalRepository.getImageData(image.getId() + ".png")), width, height);
         }
 
         return null;
     }
+
 
 
 

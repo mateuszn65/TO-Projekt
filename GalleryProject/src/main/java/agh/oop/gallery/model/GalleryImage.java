@@ -7,9 +7,14 @@ import javafx.scene.image.Image;
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
 
+
 public class GalleryImage {
-    public static int miniatureWidth = 160;
-    public static int miniatureHeight = 100;
+    public static int smallMiniatureWidth = 160;
+    public static int smallMiniatureHeight = 100;
+    public static int mediumMiniatureWidth = 200;
+    public static int mediumMiniatureHeight = 120;
+    public static int bigMiniatureWidth = 360;
+    public static int bigMiniatureHeight = 240;
     private String name;
     private Integer id;
     private final ObjectProperty<ImageStatus> imageStatusObjectProperty;

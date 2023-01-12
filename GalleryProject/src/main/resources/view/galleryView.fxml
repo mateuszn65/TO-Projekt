@@ -26,6 +26,21 @@
             minWidth="100"
             maxWidth="Infinity"
             text="upload"/>
+    <Button mnemonicParsing="false"
+            onAction="#setSmallMiniatures"
+            minHeight="20.0"
+            minWidth="20.0"
+            text="small"/>
+    <Button mnemonicParsing="false"
+            onAction="#setMediumMiniatures"
+            minHeight="20.0"
+            minWidth="20.0"
+            text="medium"/>
+    <Button mnemonicParsing="false"
+            onAction="#setBigMiniatures"
+            minHeight="20.0"
+            minWidth="20.0"
+            text="big"/>
     <GridView fx:id="imagesGridView" prefWidth="Infinity"/>
 </VBox>
 

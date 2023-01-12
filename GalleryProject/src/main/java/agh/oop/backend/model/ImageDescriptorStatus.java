@@ -1,7 +1,7 @@
 package agh.oop.backend.model;
 
 public enum ImageDescriptorStatus {
-    UPLOADED,
+    READY,
     CONVERTING,
     FINISHED
 }

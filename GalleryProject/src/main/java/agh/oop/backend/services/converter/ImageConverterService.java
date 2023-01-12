@@ -4,6 +4,7 @@ import agh.oop.backend.persistence.GalleryRepository;
 import agh.oop.backend.persistence.OriginalImagesFileRepository;
 import agh.oop.backend.model.ImageDescriptor;
 import agh.oop.backend.model.ImageDescriptorStatus;
+import agh.oop.backend.utils.FilenameMapper;
 import com.google.common.primitives.Bytes;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +25,14 @@ public class ImageConverterService {
         this.originalRepository = originalRepository;
     }
 
-    public void notifyConverted(int id, byte[] data) throws IOException {
-        originalRepository.saveImage(Bytes.asList(data), id + "m.png");
+    public void notifyConverted(int id, byte[] data, int width, int height) throws IOException {
+        originalRepository.saveImage(Bytes.asList(data), FilenameMapper.getFilename(id, width, height));
 
         Optional<ImageDescriptor> imageDescriptor = repository.findById(id);
         if (imageDescriptor.isEmpty()){
             throw new IllegalStateException("Information was not found in the database");
         }
-        imageDescriptor.get().setImageStatus(ImageDescriptorStatus.FINISHED);
+        imageDescriptor.get().setStatusOfMiniature(width, height, ImageDescriptorStatus.FINISHED);
         repository.save(imageDescriptor.get());
     }
     public void convert(int id, byte[] imageData, int dest_width, int dest_height){
