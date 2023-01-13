@@ -41,7 +41,17 @@
             minHeight="20.0"
             minWidth="20.0"
             text="big"/>
-    <GridView fx:id="imagesGridView" prefWidth="Infinity"/>
+    <Button mnemonicParsing="false"
+            onAction="#openAddDirDialog"
+            minHeight="20.0"
+            minWidth="20.0"
+            text="dirAdd"/>
+
+    <GridView fx:id="imagesGridView" prefWidth="Infinity" prefHeight="300"/>
+    <ListView fx:id="directoriesListView" prefWidth="100"/>
+    
+
+
 </VBox>
 
 

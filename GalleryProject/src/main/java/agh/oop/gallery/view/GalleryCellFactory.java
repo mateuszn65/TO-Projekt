@@ -5,6 +5,10 @@ import agh.oop.gallery.model.GalleryImage;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -38,9 +42,19 @@ public class GalleryCellFactory implements Callback<GridView<GalleryImage>, Grid
                 try {
                     showPreview(gridCell.getItem());
                 } catch (IOException e) {
+                    event.consume();
                     throw new RuntimeException(e);
                 }
             }
+            event.consume();
+        });
+        gridCell.setOnDragDetected(ev -> {
+            System.out.println("yellow");
+            Dragboard db = gridCell.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            content.putString("str");
+            db.setContent(content);
+            ev.consume();
         });
         return gridCell;
     }

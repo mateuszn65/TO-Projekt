@@ -10,6 +10,8 @@ import retrofit2.Response;
 
 import java.util.Map;
 
+import static agh.oop.gallery.model.ImageContainer.rootDir;
+
 public class InitModelHandler implements Callback<Map<Integer, String>> {
 
     private final ImageContainer imageContainer;

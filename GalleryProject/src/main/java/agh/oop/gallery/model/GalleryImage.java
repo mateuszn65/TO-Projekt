@@ -20,6 +20,7 @@ public class GalleryImage {
     private final ObjectProperty<ImageStatus> imageStatusObjectProperty;
     private Image miniImage;
     private byte[] imageData;
+    private GalleryDirectory directory;
 
     public GalleryImage(String name, byte[] imageData){
         this(null, name, imageData);
@@ -34,6 +35,21 @@ public class GalleryImage {
         this.imageData = imageData;
         this.imageStatusObjectProperty = new SimpleObjectProperty<>(ImageStatus.UPLOADING);
     }
+
+    public GalleryDirectory getDirectory() {
+        return directory;
+    }
+    public void setDirectory(GalleryDirectory directory) {
+        this.directory = directory;
+    }
+
+    public void deleteFromCurrentDir() {
+        if(directory != null) {
+            directory.removeImage(this);
+        }
+        directory = null;
+    }
+
 
     public Optional<byte[]> getImageData() {
         return Optional.of(imageData);

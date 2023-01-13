@@ -41,3 +41,7 @@ Refaktoryzacja, dodanie gitignore, posprzątanie repozytorium, niewielkie zmiany
 ### 12.01.2022
 
 Dodanie obsługi różnych rozmiarów miniatur
+
+### 13.01.2022
+
+Dodanie katalogowania obrazów
