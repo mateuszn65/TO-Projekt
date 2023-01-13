@@ -8,6 +8,8 @@ import agh.oop.backend.model.ImageDescriptorStatus;
 import agh.oop.backend.utils.FilenameMapper;
 import agh.oop.backend.utils.LabelMapper;
 import com.google.common.primitives.Bytes;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +22,7 @@ import static agh.oop.backend.model.MiniatureSize.MEDIUM;
 import static agh.oop.backend.model.MiniatureSize.BIG;
 
 @Service
-public class ImageConverterService {
+public class ImageConverterService implements ApplicationListener<ContextRefreshedEvent> {
     private final GalleryRepository repository;
     private final ImageConverterQueue queue;
     private final OriginalImagesFileRepository originalRepository;
@@ -33,7 +35,7 @@ public class ImageConverterService {
         this.originalRepository = originalRepository;
     }
 
-    @PostConstruct
+
     public void convertRecovered() throws IOException {
         List<ImageDescriptor> descriptorList = repository.findAll();
         for(ImageDescriptor descriptor : descriptorList) {
@@ -66,4 +68,12 @@ public class ImageConverterService {
         queue.addImage(id, imageData, dest_width, dest_height);
     }
 
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        try {
+            convertRecovered();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
