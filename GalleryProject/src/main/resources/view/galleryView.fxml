@@ -18,6 +18,7 @@
       fx:id="galleryView"
       fx:controller="agh.oop.gallery.controllers.GalleryViewController">
 
+
     <Button mnemonicParsing="false"
             onAction="#handleUploadOnAction"
             onDragDropped="#handleDragDropped"
@@ -26,29 +27,61 @@
             minWidth="100"
             maxWidth="Infinity"
             text="upload"/>
-    <Button mnemonicParsing="false"
-            onAction="#setSmallMiniatures"
-            minHeight="20.0"
-            minWidth="20.0"
-            text="small"/>
-    <Button mnemonicParsing="false"
-            onAction="#setMediumMiniatures"
-            minHeight="20.0"
-            minWidth="20.0"
-            text="medium"/>
-    <Button mnemonicParsing="false"
-            onAction="#setBigMiniatures"
-            minHeight="20.0"
-            minWidth="20.0"
-            text="big"/>
+    <HBox maxHeight="100"
+    maxWidth="Infinity"
+    prefWidth="800"
+    prefHeight="100"
+    minHeight="50"
+    minWidth="800">
+        <Button mnemonicParsing="false"
+                onAction="#setSmallMiniatures"
+                minHeight="40.0"
+                minWidth="100.0"
+                text="small"/>
+        <Button mnemonicParsing="false"
+                onAction="#setMediumMiniatures"
+                minHeight="40.0"
+                minWidth="100.0"
+                text="medium"/>
+        <Button mnemonicParsing="false"
+                onAction="#setBigMiniatures"
+                minHeight="40.0"
+                minWidth="100.0"
+                text="big"/>
+    </HBox>
+
+
+
     <Button mnemonicParsing="false"
             onAction="#openAddDirDialog"
-            minHeight="20.0"
-            minWidth="20.0"
+            minHeight="40.0"
+            minWidth="100.0"
             text="dirAdd"/>
+    <HBox maxHeight="800"
+          maxWidth="Infinity"
+          prefWidth="800"
+          prefHeight="500"
+          minHeight="300"
+          minWidth="800">
+        <ListView fx:id="directoriesListView"
+                  maxHeight="800"
+                  maxWidth="300"
+                  prefWidth="200"
+                  prefHeight="500"
+                  minHeight="300"
+                  minWidth="100"/>
+        <GridView fx:id="imagesGridView"
+                  maxHeight="800"
+                  maxWidth="600"
+                  prefWidth="800"
+                  prefHeight="500"
+                  minHeight="300"
+                  minWidth="800"
+        />
 
-    <GridView fx:id="imagesGridView" prefWidth="Infinity" prefHeight="300"/>
-    <ListView fx:id="directoriesListView" prefWidth="100"/>
+    </HBox>
+
+
     
 
 

@@ -53,6 +53,7 @@ public class GetMiniatureHandler implements Callback<List<Byte>> {
     }
 
     private void handleReceivedMiniature(List<Byte> imgBytes, GalleryImage galleryImage) {
+        Platform.runLater(() -> galleryImage.setImageStatusProperty(ImageStatus.LOADING));
         byte[] buffer = Bytes.toArray(imgBytes);
         galleryImage.setMiniImage(buffer);
         Platform.runLater(()-> galleryImage.setImageStatusProperty(ImageStatus.RECEIVED));
