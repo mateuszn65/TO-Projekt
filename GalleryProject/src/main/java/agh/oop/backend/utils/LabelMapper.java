@@ -21,4 +21,20 @@ public class LabelMapper {
         }
         throw new RuntimeException("Unknown width and height");
     }
+
+    public static int getWidth(MiniatureSize size) {
+        return switch(size) {
+            case SMALL -> smallMiniatureWidth;
+            case MEDIUM -> mediumMiniatureWidth;
+            case BIG -> bigMiniatureWidth;
+        };
+    }
+
+    public static int getHeight(MiniatureSize size) {
+        return switch(size) {
+            case SMALL -> smallMiniatureHeight;
+            case MEDIUM -> mediumMiniatureHeight;
+            case BIG -> bigMiniatureHeight;
+        };
+    }
 }

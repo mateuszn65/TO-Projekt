@@ -45,3 +45,7 @@ Dodanie obsługi różnych rozmiarów miniatur
 ### 13.01.2022
 
 Dodanie katalogowania obrazów
+
+### 13.01.2022
+
+Dodanie przywracania obrazów po nieoczekiwanym zamknięciu serwera

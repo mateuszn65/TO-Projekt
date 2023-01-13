@@ -1,13 +1,21 @@
 package agh.oop.gallery.controllers;
 import agh.oop.RetrofitController;
+import agh.oop.gallery.model.GalleryDirectory;
 import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
+import agh.oop.gallery.view.DialogScene;
+import agh.oop.gallery.view.DirectoryCellFactory;
 import agh.oop.gallery.view.GalleryCellFactory;
 import agh.oop.utils.FileUtils;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
@@ -20,8 +28,11 @@ import java.util.List;
 public class GalleryViewController {
     @FXML
     public GridView<GalleryImage> imagesGridView;
+    @FXML
+    public ListView<GalleryDirectory> directoriesListView;
     private ImageContainer imageContainer;
     private Stage primaryStage;
+
 
     private RetrofitController retrofitController;
     private Image placeholder;
@@ -40,6 +51,11 @@ public class GalleryViewController {
         imagesGridView.setItems(images);
     }
 
+    private void prepareDirListView() {
+        directoriesListView.setItems(imageContainer.getDirs());
+        directoriesListView.setCellFactory(new DirectoryCellFactory(imageContainer));
+    }
+
 
     @FXML
     public void initialize() throws IOException {
@@ -53,6 +69,7 @@ public class GalleryViewController {
         placeholder = retrofitController.getPlaceholder();
         prepareGridView(miniatureHeight, miniatureWidth, imageContainer.getGallery());
         imagesGridView.setCellFactory(new GalleryCellFactory(miniatureHeight, miniatureWidth, placeholder, primaryStage, retrofitController));
+        prepareDirListView();
     }
 
 
@@ -106,6 +123,18 @@ public class GalleryViewController {
         imageContainer.getGallery().forEach(img -> retrofitController.getMiniature(img, miniatureWidth, miniatureHeight));
         prepareGridView(miniatureHeight, miniatureWidth, imageContainer.getGallery());
         imagesGridView.setCellFactory(new GalleryCellFactory(miniatureHeight, miniatureWidth, placeholder, primaryStage, retrofitController));
+    }
+    public void handleAddDir(String dirName) {
+        imageContainer.createDirectory(dirName);
+    }
 
+    public void openAddDirDialog(ActionEvent actionEvent) throws IOException {
+        Stage dialogStage = new Stage();
+        dialogStage.setScene(new DialogScene(this, dialogStage).getScene());
+        dialogStage.showAndWait();
+    }
+
+    public void removeDir(GalleryDirectory dir) {
+        imageContainer.deleteDir(dir);
     }
 }
