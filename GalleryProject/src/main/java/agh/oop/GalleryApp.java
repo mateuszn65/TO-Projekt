@@ -16,8 +16,8 @@ public class GalleryApp extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/galleryView.fxml"));
         rootLayout = fxmlLoader.load();
-         //add layout to a scene and show them all
         configureStage(primaryStage);
+         //add layout to a scene and show them all
         GalleryViewController galleryController = fxmlLoader.getController();
         galleryController.setPrimaryStage(primaryStage);
         primaryStage.show();

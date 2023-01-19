@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import org.controlsfx.control.GridCell;
 
 public class GalleryGridCell extends GridCell<GalleryImage> {
+    public static final int cellPadding = 10;
     private final int cellHeight;
     private final int cellWidth;
     private final Image placeholderImage;

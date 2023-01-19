@@ -2,7 +2,7 @@ package agh.oop;
 
 import agh.oop.backend.services.gallery.IGalleryService;
 import agh.oop.gallery.handlers.GetMiniatureHandler;
-import agh.oop.gallery.handlers.InitModelHandler;
+import agh.oop.gallery.handlers.GetImagesHandler;
 import agh.oop.gallery.handlers.SyncResponseHandler;
 import agh.oop.gallery.handlers.UploadHandler;
 import agh.oop.gallery.model.GalleryImage;
@@ -49,10 +49,10 @@ public class RetrofitController {
         call.enqueue(new GetMiniatureHandler(galleryImage, this, miniatureWidth, miniatureHeight));
     }
 
-    public void initModel(ImageContainer imageContainer, int miniatureWidth, int miniatureHeight){
+    public void initModel(ImageContainer imageContainer, int miniatureWidth, int miniatureHeight, int page, int size){
         log.info("Initializing model with {} miniatureWidth, {} miniatureHeight", miniatureWidth, miniatureHeight);
-        Call<Map<Integer, String>> call = galleryService.getInitialImages();
-        call.enqueue(new InitModelHandler(imageContainer, this, miniatureWidth, miniatureHeight));
+        Call<Map<Integer, String>> call = galleryService.getImages(0, 16);
+        call.enqueue(new GetImagesHandler(imageContainer, this, miniatureWidth, miniatureHeight));
     }
 
     public Image getPlaceholder() throws IOException {
@@ -64,6 +64,13 @@ public class RetrofitController {
         log.info("Original image with id {} requested", id);
         Response<List<Byte>> response = galleryService.getOriginalImage(id).execute();
         return SyncResponseHandler.getImage(response);
+    }
+
+    public void loadMore(ImageContainer imageContainer, int miniatureWidth, int miniatureHeight, int page, int size){
+        log.info("Loading more images with page {} size {}", page, size);
+        log.info("Initializing model with {} miniatureWidth, {} miniatureHeight", miniatureWidth, miniatureHeight);
+        Call<Map<Integer, String>> call = galleryService.getImages(page, size);
+        call.enqueue(new GetImagesHandler(imageContainer, this, miniatureWidth, miniatureHeight));
     }
 
 

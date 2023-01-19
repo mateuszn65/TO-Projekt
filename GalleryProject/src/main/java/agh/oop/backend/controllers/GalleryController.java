@@ -4,6 +4,8 @@ package agh.oop.backend.controllers;
 import agh.oop.backend.services.gallery.GalleryService;
 import com.google.common.primitives.Bytes;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,9 +63,13 @@ public class GalleryController {
         }
     }
 
+//    @RequestMapping(method = RequestMethod.GET)
+//    public ResponseEntity<Map<Integer, String>> getInitialImages(){
+//        return ResponseEntity.ok().body(galleryService.getInitialImages());
+//    }
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Map<Integer, String>> getInitialImages(){
-        return ResponseEntity.ok().body(galleryService.getInitialImages());
+    public ResponseEntity<Map<Integer, String>> getBooks(@PageableDefault(page = 0, size = 5) Pageable pageable) {
+        return ResponseEntity.ok().body(galleryService.getImages(pageable));
     }
 
 }

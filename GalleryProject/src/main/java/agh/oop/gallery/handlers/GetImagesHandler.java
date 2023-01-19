@@ -3,6 +3,7 @@ package agh.oop.gallery.handlers;
 import agh.oop.RetrofitController;
 import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
+import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -10,16 +11,14 @@ import retrofit2.Response;
 
 import java.util.Map;
 
-import static agh.oop.gallery.model.ImageContainer.rootDir;
-
-public class InitModelHandler implements Callback<Map<Integer, String>> {
+public class GetImagesHandler implements Callback<Map<Integer, String>> {
 
     private final ImageContainer imageContainer;
     private final RetrofitController retrofitController;
     private final int miniatureWidth;
     private final int miniatureHeight;
 
-    public InitModelHandler(ImageContainer imageContainer, RetrofitController retrofitController, int miniatureWidth, int miniatureHeight) {
+    public GetImagesHandler(ImageContainer imageContainer, RetrofitController retrofitController, int miniatureWidth, int miniatureHeight) {
         this.imageContainer = imageContainer;
         this.retrofitController = retrofitController;
         this.miniatureHeight = miniatureHeight;
@@ -34,9 +33,12 @@ public class InitModelHandler implements Callback<Map<Integer, String>> {
             }
             Map<Integer, String> map = response.body();
             map.forEach((id, filename)->{
-                GalleryImage galleryImage = new GalleryImage(id, filename);
-                imageContainer.addToGallery(galleryImage);
-                retrofitController.getMiniature(galleryImage, miniatureWidth, miniatureHeight);
+                Platform.runLater(()->{
+                    GalleryImage galleryImage = new GalleryImage(id, filename);
+                    imageContainer.addToGallery(galleryImage);
+                    retrofitController.getMiniature(galleryImage, miniatureWidth, miniatureHeight);
+                });
+
             });
         }
     }

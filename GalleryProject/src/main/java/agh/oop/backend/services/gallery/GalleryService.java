@@ -8,6 +8,8 @@ import agh.oop.backend.services.converter.ImageConverterService;
 import agh.oop.backend.utils.FilenameMapper;
 import agh.oop.backend.utils.LabelMapper;
 import com.google.common.primitives.Bytes;
+import org.springframework.data.domain.Pageable;
+
 import java.io.*;
 import java.util.*;
 
@@ -74,5 +76,13 @@ public class GalleryService{
 
     public List<Byte> getPlaceholder() throws IOException {
         return originalRepository.getImageData( "loading.png");
+    }
+
+    public Map<Integer, String> getImages(Pageable pageable) {
+        Map<Integer, String> map= new HashMap<>();
+        for (ImageDescriptor imageDescriptor:repository.findAll(pageable)) {
+            map.put(imageDescriptor.getId(), imageDescriptor.getFilename());
+        }
+        return map;
     }
 }

@@ -37,7 +37,7 @@ public class ImageConverterService implements ApplicationListener<ContextRefresh
 
 
     public void convertRecovered() throws IOException {
-        List<ImageDescriptor> descriptorList = repository.findAll();
+        List<ImageDescriptor> descriptorList = (List<ImageDescriptor>) repository.findAll();
         for(ImageDescriptor descriptor : descriptorList) {
             int id = descriptor.getId();
             String filename = id + ".png";

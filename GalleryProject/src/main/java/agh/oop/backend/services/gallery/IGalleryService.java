@@ -21,6 +21,6 @@ public interface IGalleryService {
     @GET("/images/{id}")
     Call<List<Byte>> getOriginalImage(@Path("id") int id);
     @GET("/images")
-    Call<Map<Integer, String>> getInitialImages();
+    Call<Map<Integer, String>> getImages(@Query("page") int page, @Query("size") int size);
 
 }

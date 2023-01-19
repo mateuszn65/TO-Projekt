@@ -9,14 +9,16 @@
 <?import org.controlsfx.control.GridView?>
 <VBox maxHeight="Infinity"
       maxWidth="Infinity"
+      VBox.vgrow="ALWAYS"
       prefHeight="600"
-      prefWidth="800"
+      prefWidth="900"
       minHeight="220"
       minWidth="200"
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:id="galleryView"
-      fx:controller="agh.oop.gallery.controllers.GalleryViewController">
+      fx:controller="agh.oop.gallery.controllers.GalleryViewController"
+        stylesheets="/css/gallery.css">
 
 
     <Button mnemonicParsing="false"
@@ -27,12 +29,12 @@
             minWidth="100"
             maxWidth="Infinity"
             text="upload"/>
-    <HBox maxHeight="100"
-    maxWidth="Infinity"
-    prefWidth="800"
-    prefHeight="100"
-    minHeight="50"
-    minWidth="800">
+    <HBox maxHeight="50"
+          maxWidth="Infinity"
+          minHeight="50"
+          minWidth="800"
+          alignment="CENTER"
+    >
         <Button mnemonicParsing="false"
                 onAction="#setSmallMiniatures"
                 minHeight="40.0"
@@ -50,42 +52,46 @@
                 text="big"/>
     </HBox>
 
+    <HBox
+            minHeight="400"
+            minWidth="800"
+            prefWidth="800"
+            maxHeight="Infinity"
+            maxWidth="Infinity"
+    >
 
+        <VBox minHeight="200"
+              minWidth="100"
+              maxHeight="Infinity"
+              maxWidth="100"
+              prefWidth="100"
+              VBox.vgrow="ALWAYS">
 
-    <Button mnemonicParsing="false"
-            onAction="#openAddDirDialog"
-            minHeight="40.0"
-            minWidth="100.0"
-            text="dirAdd"/>
-    <HBox maxHeight="800"
-          maxWidth="Infinity"
-          prefWidth="800"
-          prefHeight="500"
-          minHeight="300"
-          minWidth="800">
-        <ListView fx:id="directoriesListView"
-                  maxHeight="800"
-                  maxWidth="300"
-                  prefWidth="200"
-                  prefHeight="500"
-                  minHeight="300"
-                  minWidth="100"/>
-        <GridView fx:id="imagesGridView"
-                  maxHeight="800"
-                  maxWidth="600"
-                  prefWidth="800"
-                  prefHeight="500"
-                  minHeight="300"
-                  minWidth="800"
-        />
-
+            <Button mnemonicParsing="false"
+                    onAction="#openAddDirDialog"
+                    minHeight="40"
+                    minWidth="100"
+                    maxWidth="100"
+                    text="dirAdd"/>
+            <ListView fx:id="directoriesListView"
+                      maxHeight="Infinity"
+                      VBox.vgrow="ALWAYS"
+                      minHeight="300"/>
+        </VBox>
+        <ScrollPane fx:id="scrollPane"
+                    minHeight="300"
+                    minWidth="800"
+                    HBox.hgrow="ALWAYS"
+                    maxHeight="Infinity"
+                    maxWidth="Infinity"
+        >
+            <GridView fx:id="imagesGridView"
+                      minHeight="300"
+                      minWidth="800"
+                      HBox.hgrow="ALWAYS"
+                      maxHeight="Infinity"
+                      maxWidth="Infinity"
+            />
+        </ScrollPane>
     </HBox>
-
-
-    
-
-
 </VBox>
-
-
-
