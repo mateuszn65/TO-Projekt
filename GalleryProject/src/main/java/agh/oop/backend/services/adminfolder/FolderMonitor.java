@@ -12,12 +12,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class FolderMonitor implements Runnable {
 
-    private Path folderPath;
+    private final Path folderPath;
     private final List<FolderMonitorSubscriber> subscribers;
 
     public FolderMonitor(@Value("${gallery.app.admin.folder}") String folderPath) {
         this.folderPath = Paths.get(folderPath);
         this.subscribers = new ArrayList<>();
+        prepareFolder();
+        startMonitoring();
+    }
+    private void prepareFolder() {
+        if (!Files.exists(folderPath)) {
+            try {
+                Files.createDirectory(folderPath);
+            } catch (IOException e) {
+                log.error("Error while creating admin folder", e);
+            }
+        }
+    }
+    private void startMonitoring(){
         Thread thread = new Thread(this);
         thread.setDaemon(true);
         thread.start();
