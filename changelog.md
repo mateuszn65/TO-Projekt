@@ -49,3 +49,8 @@ Dodanie katalogowania obrazów
 ### 13.01.2022
 
 Dodanie przywracania obrazów po nieoczekiwanym zamknięciu serwera
+
+
+### 19.01.2022
+
+Dodanie monitorowania folderu

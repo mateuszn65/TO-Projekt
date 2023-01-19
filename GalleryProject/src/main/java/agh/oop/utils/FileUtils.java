@@ -1,10 +1,14 @@
 package agh.oop.utils;
 
 import agh.oop.gallery.model.GalleryImage;
+import com.google.common.primitives.Bytes;
 import org.apache.tika.Tika;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipFile;
 
@@ -27,5 +31,14 @@ public class FileUtils {
             galleryImages = getFilesContent(files);
         }
         return galleryImages;
+    }
+    public static List<Byte> getBytesFromFile(File file) throws IOException {
+        InputStream inputStream = new FileInputStream(file);
+        byte[] buffer = inputStream.readAllBytes();
+        inputStream.close();
+
+        if (isImage(buffer))
+            return Bytes.asList(buffer);
+        return null;
     }
 }
