@@ -1,6 +1,7 @@
 package agh.oop.backend.services.converter;
 
 
+import agh.oop.backend.model.MiniatureSize;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,8 +21,8 @@ public class ImageConverterQueue {
         subscribers.add(subscriber);
     }
 
-    public void addImage(int id, byte[] imageData, int dest_width, int dest_height){
-        ImageConverter converter = new ImageConverter(id, imageData, dest_width, dest_height);
+    public void addImage(int id, byte[] imageData, MiniatureSize size){
+        ImageConverter converter = new ImageConverter(id, imageData, size);
         notifySubscribers(converter);
     }
 }

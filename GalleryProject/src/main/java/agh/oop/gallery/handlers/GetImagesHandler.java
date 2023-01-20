@@ -3,6 +3,7 @@ package agh.oop.gallery.handlers;
 import agh.oop.RetrofitController;
 import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
+import agh.oop.gallery.model.MiniatureSize;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
@@ -15,14 +16,12 @@ public class GetImagesHandler implements Callback<Map<Integer, String>> {
 
     private final ImageContainer imageContainer;
     private final RetrofitController retrofitController;
-    private final int miniatureWidth;
-    private final int miniatureHeight;
+    private MiniatureSize size;
 
-    public GetImagesHandler(ImageContainer imageContainer, RetrofitController retrofitController, int miniatureWidth, int miniatureHeight) {
+    public GetImagesHandler(ImageContainer imageContainer, RetrofitController retrofitController, MiniatureSize size) {
         this.imageContainer = imageContainer;
         this.retrofitController = retrofitController;
-        this.miniatureHeight = miniatureHeight;
-        this.miniatureWidth = miniatureWidth;
+        this.size = size;
     }
 
     @Override
@@ -36,7 +35,7 @@ public class GetImagesHandler implements Callback<Map<Integer, String>> {
                 Platform.runLater(()->{
                     GalleryImage galleryImage = new GalleryImage(id, filename);
                     imageContainer.addToGallery(galleryImage);
-                    retrofitController.getMiniature(galleryImage, miniatureWidth, miniatureHeight);
+                    retrofitController.getMiniature(galleryImage, size);
                 });
 
             });

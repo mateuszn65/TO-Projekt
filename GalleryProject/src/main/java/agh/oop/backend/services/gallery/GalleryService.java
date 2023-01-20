@@ -1,5 +1,6 @@
 package agh.oop.backend.services.gallery;
 
+import agh.oop.backend.model.MiniatureSize;
 import agh.oop.backend.persistence.GalleryRepository;
 import agh.oop.backend.persistence.OriginalImagesFileRepository;
 import agh.oop.backend.model.ImageDescriptor;
@@ -43,21 +44,23 @@ public class GalleryService{
     }
 
 
-    public List<Byte> getMiniature(int id, int width, int height) throws IOException {
+    public List<Byte> getMiniature(int id, MiniatureSize size) throws IOException {
         Optional<ImageDescriptor> imageDescriptor = repository.findById(id);
         if (imageDescriptor.isEmpty()) {
             return null;
         }
         ImageDescriptor image = imageDescriptor.get();
 
-        if (image.getStatusOfMiniature(width, height) == ImageDescriptorStatus.FINISHED){
+        if (image.getStatusOfMiniature(size) == ImageDescriptorStatus.FINISHED){
+            int width = LabelMapper.getWidth(size);
+            int height = LabelMapper.getHeight(size);
             return originalRepository.getImageData(FilenameMapper.getFilename(id, width, height));
         }
 
-        if (image.getStatusOfMiniature(width, height) == ImageDescriptorStatus.READY){
-            image.setStatusOfMiniature(width, height, ImageDescriptorStatus.CONVERTING);
+        if (image.getStatusOfMiniature(size) == ImageDescriptorStatus.READY){
+            image.setStatusOfMiniature(size, ImageDescriptorStatus.CONVERTING);
             repository.save(image);
-            imageConverterService.convert(image.getId(), Bytes.toArray(originalRepository.getImageData(image.getId() + ".png")), width, height);
+            imageConverterService.convert(image.getId(), Bytes.toArray(originalRepository.getImageData(image.getId() + ".png")), size);
         }
 
         return null;

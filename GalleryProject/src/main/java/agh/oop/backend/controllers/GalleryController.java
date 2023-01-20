@@ -1,6 +1,7 @@
 package agh.oop.backend.controllers;
 
 
+import agh.oop.backend.model.MiniatureSize;
 import agh.oop.backend.services.gallery.GalleryService;
 import com.google.common.primitives.Bytes;
 import org.apache.commons.codec.binary.Base64;
@@ -34,9 +35,9 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/miniatures/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Byte>> getMiniature(@PathVariable int id, @RequestParam int width, @RequestParam int height){
+    public ResponseEntity<List<Byte>> getMiniature(@PathVariable int id, @RequestParam MiniatureSize size){
         try {
-            List<Byte> bytes = galleryService.getMiniature(id, width, height);
+            List<Byte> bytes = galleryService.getMiniature(id, size);
             if (bytes != null){
                 return ResponseEntity.ok().body(bytes);
             }

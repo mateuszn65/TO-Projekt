@@ -1,6 +1,8 @@
 package agh.oop.backend.services.converter;
 
 
+import agh.oop.backend.model.MiniatureSize;
+import agh.oop.backend.utils.LabelMapper;
 import net.coobird.thumbnailator.Thumbnails;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -11,18 +13,16 @@ import java.io.IOException;
 public class ImageConverter implements Runnable{
     private final int id;
     private final byte[] img;
-    private final int destWidth;
-    private final int destHeight;
+    private MiniatureSize size;
     private ImageConverterService imageConverterService;
 
     public static final String OUTPUT_FORMAT = "JPEG";
 
 
-    public ImageConverter(int id, byte[] img, int destWidth, int destHeight) {
+    public ImageConverter(int id, byte[] img, MiniatureSize size) {
         this.id = id;
         this.img = img;
-        this.destWidth = destWidth;
-        this.destHeight = destHeight;
+        this.size = size;
     }
 
     public void setImageConverterService(ImageConverterService imageConverterService) {
@@ -33,6 +33,8 @@ public class ImageConverter implements Runnable{
     public void run() {
         //converting
         try {
+            int destWidth = LabelMapper.getWidth(size);
+            int destHeight = LabelMapper.getHeight(size);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             ByteArrayInputStream is = new ByteArrayInputStream(img);
             BufferedImage bufferedImage = ImageIO.read(is);
@@ -43,7 +45,7 @@ public class ImageConverter implements Runnable{
                     .toOutputStream(outputStream);
             byte[] data = outputStream.toByteArray();
 
-            imageConverterService.notifyConverted(id, data, destWidth, destHeight);
+            imageConverterService.notifyConverted(id, data, size);
         } catch (IOException e) {
             e.printStackTrace();
         }

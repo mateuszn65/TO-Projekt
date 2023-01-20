@@ -3,11 +3,13 @@ import agh.oop.RetrofitController;
 import agh.oop.gallery.model.GalleryDirectory;
 import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
+import agh.oop.gallery.model.MiniatureSize;
 import agh.oop.gallery.view.DialogScene;
 import agh.oop.gallery.view.DirectoryCellFactory;
 import agh.oop.gallery.view.GalleryCellFactory;
 import agh.oop.gallery.view.GalleryGridCell;
 import agh.oop.utils.FileUtils;
+import agh.oop.utils.LabelMapper;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
@@ -50,8 +52,6 @@ public class GalleryViewController {
     private int page = 0;
     private int rowSize = 4;
     private int initPageSize = 20;
-    private int currentMiniatureWidth = GalleryImage.smallMiniatureWidth;
-    private int currentMiniatureHeight = GalleryImage.smallMiniatureHeight;
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -76,17 +76,17 @@ public class GalleryViewController {
         });
     }
     private int getNumberOfImagesInRow() {
-        return (int) Math.floor((this.primaryStage.getWidth() - directoriesListView.getWidth()) / (currentMiniatureWidth + GalleryGridCell.cellPadding * 2));
+        return (int) Math.floor((this.primaryStage.getWidth() - directoriesListView.getWidth()) / (LabelMapper.getWidth(imageContainer.getCurrentSize()) + GalleryGridCell.cellPadding * 2));
     }
     private int getNumberOfImagesInColumn() {
-        return (int) Math.floor((primaryStage.getHeight() - 150) / (currentMiniatureHeight + GalleryGridCell.cellPadding * 2));
+        return (int) Math.floor((primaryStage.getHeight() - 150) / (LabelMapper.getHeight(imageContainer.getCurrentSize()) + GalleryGridCell.cellPadding * 2));
     }
     private int getNumberOfImagesInPage() {
         return getNumberOfImagesInRow() * getNumberOfImagesInColumn() + getNumberOfImagesInRow();
     }
     private void loadMoreOnResize(int newInitPageSize) {
         while (newInitPageSize > initPageSize + (page) * rowSize) {
-            retrofitController.loadMore(imageContainer, currentMiniatureWidth, currentMiniatureHeight, page++, rowSize);
+            retrofitController.loadMore(imageContainer, imageContainer.getCurrentSize(), page++, rowSize);
         }
     }
 
@@ -104,19 +104,22 @@ public class GalleryViewController {
 
     @FXML
     public void initialize() throws IOException {
-        initialize(currentMiniatureWidth, currentMiniatureHeight);
+
+        initialize(MiniatureSize.SMALL);
     }
 
-    public void initialize(int miniatureWidth, int miniatureHeight) throws IOException {
+    public void initialize(MiniatureSize size) throws IOException {
         addScrollListeners();
-        imageContainer = new ImageContainer(miniatureWidth, miniatureHeight);
+        imageContainer = new ImageContainer(size);
         retrofitController = new RetrofitController();
 
         placeholder = retrofitController.getPlaceholder();
+        int miniatureHeight = LabelMapper.getHeight(size);
+        int miniatureWidth = LabelMapper.getWidth(size);
         prepareGridView(miniatureHeight, miniatureWidth, imageContainer.getGallery());
         imagesGridView.setCellFactory(new GalleryCellFactory(miniatureHeight, miniatureWidth, placeholder, primaryStage, retrofitController));
         prepareDirListView();
-        retrofitController.loadMore(imageContainer, currentMiniatureWidth, currentMiniatureHeight, page++, initPageSize);
+        retrofitController.loadMore(imageContainer, imageContainer.getCurrentSize(), page++, initPageSize);
     }
 
 
@@ -124,7 +127,7 @@ public class GalleryViewController {
         List<GalleryImage> galleryImages = FileUtils.getImagesFromFiles(files);
         for (GalleryImage image : galleryImages) {
             imageContainer.addToGallery(image);
-            retrofitController.upload(image, imageContainer.getMiniatureWidth(), imageContainer.getMiniatureHeight());
+            retrofitController.upload(image, imageContainer.getCurrentSize());
         }
     }
     public void handleUploadOnAction(ActionEvent actionEvent) throws IOException {
@@ -147,29 +150,26 @@ public class GalleryViewController {
     }
 
     public void setSmallMiniatures(ActionEvent actionEvent) {
-        imageContainer.setMiniatureWidth(GalleryImage.smallMiniatureWidth);
-        imageContainer.setMiniatureHeight(GalleryImage.smallMiniatureHeight);
+        imageContainer.setMiniatureSize(MiniatureSize.SMALL);
         resetImages();
     }
 
     public void setMediumMiniatures(ActionEvent actionEvent) {
-        imageContainer.setMiniatureWidth(GalleryImage.mediumMiniatureWidth);
-        imageContainer.setMiniatureHeight(GalleryImage.mediumMiniatureHeight);
+        imageContainer.setMiniatureSize(MiniatureSize.MEDIUM);
         resetImages();
     }
 
     public void setBigMiniatures(ActionEvent actionEvent) {
-        imageContainer.setMiniatureWidth(GalleryImage.bigMiniatureWidth);
-        imageContainer.setMiniatureHeight(GalleryImage.bigMiniatureHeight);
+        imageContainer.setMiniatureSize(MiniatureSize.BIG);
         resetImages();
     }
 
     private void resetImages() {
-        currentMiniatureHeight = imageContainer.getMiniatureHeight();
-        currentMiniatureWidth = imageContainer.getMiniatureWidth();
         updatePageSize();
         loadMoreOnResize(getNumberOfImagesInPage());
-        imageContainer.getGallery().forEach(img -> retrofitController.getMiniature(img, currentMiniatureWidth, currentMiniatureHeight));
+        int currentMiniatureHeight = LabelMapper.getHeight(imageContainer.getCurrentSize());
+        int currentMiniatureWidth = LabelMapper.getWidth(imageContainer.getCurrentSize());
+        imageContainer.getGallery().forEach(img -> retrofitController.getMiniature(img, imageContainer.getCurrentSize()));
         prepareGridView(currentMiniatureHeight, currentMiniatureWidth, imageContainer.getGallery());
         imagesGridView.setCellFactory(new GalleryCellFactory(currentMiniatureHeight, currentMiniatureWidth, placeholder, primaryStage, retrofitController));
     }
@@ -206,7 +206,7 @@ public class GalleryViewController {
 
         scrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.doubleValue() == scrollPane.getVmax()) {
-                retrofitController.loadMore(imageContainer, imageContainer.getMiniatureWidth(), imageContainer.getMiniatureHeight(), page++, rowSize);
+                retrofitController.loadMore(imageContainer, imageContainer.getCurrentSize(), page++, rowSize);
             }
         });
 

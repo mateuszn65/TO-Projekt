@@ -67,16 +67,16 @@ public class ImageDescriptor {
         this.imageStatusBig = imageStatusBig;
     }
 
-    public ImageDescriptorStatus getStatusOfMiniature(int width, int height) {
-        return switch (LabelMapper.getLabel(width, height)) {
+    public ImageDescriptorStatus getStatusOfMiniature(MiniatureSize size) {
+        return switch (size) {
             case SMALL -> getImageStatusSmall();
             case MEDIUM -> getImageStatusMedium();
             case BIG -> getImageStatusBig();
         };
     }
 
-    public void setStatusOfMiniature(int width, int height, ImageDescriptorStatus status) {
-        switch (LabelMapper.getLabel(width, height)) {
+    public void setStatusOfMiniature(MiniatureSize size, ImageDescriptorStatus status) {
+        switch (size) {
             case SMALL -> setImageStatusSmall(status);
             case MEDIUM -> setImageStatusMedium(status);
             case BIG -> setImageStatusBig(status);

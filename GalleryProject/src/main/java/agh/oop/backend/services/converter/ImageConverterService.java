@@ -43,29 +43,31 @@ public class ImageConverterService implements ApplicationListener<ContextRefresh
             String filename = id + ".png";
             byte[] imgData = Bytes.toArray(originalRepository.getImageData(filename));
             if(descriptor.getImageStatusSmall() == ImageDescriptorStatus.CONVERTING) {
-                convert(id, imgData, LabelMapper.getWidth(SMALL), LabelMapper.getHeight(SMALL));
+                convert(id, imgData, SMALL);
             }
             if(descriptor.getImageStatusMedium() == ImageDescriptorStatus.CONVERTING) {
-                convert(id, imgData, LabelMapper.getWidth(MEDIUM), LabelMapper.getHeight(MEDIUM));
+                convert(id, imgData, MEDIUM);
             }
             if(descriptor.getImageStatusBig() == ImageDescriptorStatus.CONVERTING) {
-                convert(id, imgData, LabelMapper.getHeight(BIG), LabelMapper.getHeight(BIG));
+                convert(id, imgData, BIG);
             }
         }
 
     }
-    public void notifyConverted(int id, byte[] data, int width, int height) throws IOException {
+    public void notifyConverted(int id, byte[] data, MiniatureSize size) throws IOException {
+        int width = LabelMapper.getWidth(size);
+        int height = LabelMapper.getHeight(size);
         originalRepository.saveImage(Bytes.asList(data), FilenameMapper.getFilename(id, width, height));
 
         Optional<ImageDescriptor> imageDescriptor = repository.findById(id);
         if (imageDescriptor.isEmpty()){
             throw new IllegalStateException("Information was not found in the database");
         }
-        imageDescriptor.get().setStatusOfMiniature(width, height, ImageDescriptorStatus.FINISHED);
+        imageDescriptor.get().setStatusOfMiniature(size, ImageDescriptorStatus.FINISHED);
         repository.save(imageDescriptor.get());
     }
-    public void convert(int id, byte[] imageData, int dest_width, int dest_height){
-        queue.addImage(id, imageData, dest_width, dest_height);
+    public void convert(int id, byte[] imageData, MiniatureSize size){
+        queue.addImage(id, imageData, size);
     }
 
     @Override

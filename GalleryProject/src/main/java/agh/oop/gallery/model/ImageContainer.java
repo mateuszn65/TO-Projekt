@@ -1,5 +1,6 @@
 package agh.oop.gallery.model;
 
+import agh.oop.utils.LabelMapper;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,14 +16,16 @@ public class ImageContainer {
     private GalleryDirectory currentDir;
     public static GalleryDirectory rootDir;
     private ObservableList<GalleryImage> gallery = FXCollections.observableArrayList(galleryImage -> new Observable[]{galleryImage.getImageStatusProperty()});
-    private int miniatureWidth;
-    private int miniatureHeight;
-    public ImageContainer(int width, int height) {
-        this.miniatureHeight = height;
-        this.miniatureWidth = width;
+    private MiniatureSize size;
+    public ImageContainer(MiniatureSize size) {
+        this.size = size;
         rootDir = new GalleryDirectory("root", false);
         directories.add(rootDir);
         currentDir = rootDir;
+    }
+
+    public MiniatureSize getCurrentSize() {
+        return this.size;
     }
 
     public boolean deleteDir(GalleryDirectory directory) {
@@ -38,19 +41,16 @@ public class ImageContainer {
     }
 
     public int getMiniatureWidth() {
-        return miniatureWidth;
+        return LabelMapper.getWidth(size);
     }
-    public void setMiniatureWidth(int miniatureWidth) {
-        this.miniatureWidth = miniatureWidth;
+    public void setMiniatureSize(MiniatureSize size) {
+        this.size = size;
     }
 
     public int getMiniatureHeight() {
-        return miniatureHeight;
+        return LabelMapper.getHeight(size);
     }
 
-    public void setMiniatureHeight(int miniatureHeight) {
-        this.miniatureHeight = miniatureHeight;
-    }
 
     public void createDirectory(String dirName) {
         directories.add(new GalleryDirectory(dirName, true));

@@ -33,11 +33,13 @@ public class DirectoryCellFactory  implements Callback<ListView<GalleryDirectory
         directoryListCell.setOnDragDropped(ev -> {
             GalleryGridCell source = (GalleryGridCell) ev.getGestureSource();
             DirectoryGridCell target = (DirectoryGridCell) ev.getGestureTarget();
-            GalleryImage img = source.getItem();
-            img.deleteFromCurrentDir();
             GalleryDirectory dir = target.getItem();
-            dir.addImage(img);
-            container.refreshView();
+            if(dir != null) {
+                GalleryImage img = source.getItem();
+                img.deleteFromCurrentDir();
+                dir.addImage(img);
+                container.refreshView();
+            }
         });
         directoryListCell.setOnDragOver(new EventHandler<DragEvent>() {
             public void handle(DragEvent event) {
