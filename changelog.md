@@ -38,19 +38,25 @@ Refaktoryzacja kodu
 
 Refaktoryzacja, dodanie gitignore, posprzątanie repozytorium, niewielkie zmiany w strukturach zapytan http
 
-### 12.01.2022
+### 12.01.2023
 
 Dodanie obsługi różnych rozmiarów miniatur
 
-### 13.01.2022
+### 13.01.2023
 
 Dodanie katalogowania obrazów
 
-### 13.01.2022
+### 13.01.2023
 
 Dodanie przywracania obrazów po nieoczekiwanym zamknięciu serwera
 
 
-### 19.01.2022
+### 19.01.2023
 
 Dodanie monitorowania folderu
+Dodanie paginacji
+
+### 20.01.2023
+Mały clean up
+
+
