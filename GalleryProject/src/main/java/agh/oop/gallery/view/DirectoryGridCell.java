@@ -4,6 +4,7 @@ import agh.oop.gallery.model.GalleryDirectory;
 import agh.oop.gallery.model.GalleryImage;
 import agh.oop.gallery.model.ImageContainer;
 import agh.oop.gallery.model.ImageStatus;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -25,10 +26,12 @@ public class DirectoryGridCell extends ListCell<GalleryDirectory> {
             GridPane pane = new GridPane();
             Button btn = new Button();
             btn.setText("X");
+            btn.setAlignment(Pos.CENTER_LEFT);
+
             Label label = new Label();
             setGraphic(pane);
             if(item.canBeDelted()) {
-                pane.addRow(0, label, btn);
+                pane.addRow(0, btn, label);
             } else {
                 pane.addRow(0, label);
             }

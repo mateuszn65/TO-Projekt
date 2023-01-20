@@ -63,12 +63,8 @@ public class GalleryController {
         }
     }
 
-//    @RequestMapping(method = RequestMethod.GET)
-//    public ResponseEntity<Map<Integer, String>> getInitialImages(){
-//        return ResponseEntity.ok().body(galleryService.getInitialImages());
-//    }
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Map<Integer, String>> getBooks(@PageableDefault(page = 0, size = 5) Pageable pageable) {
+    public ResponseEntity<Map<Integer, String>> getBooks(@PageableDefault(page = 0, size = 4) Pageable pageable) {
         return ResponseEntity.ok().body(galleryService.getImages(pageable));
     }
 

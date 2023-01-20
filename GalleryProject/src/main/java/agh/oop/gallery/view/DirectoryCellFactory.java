@@ -26,13 +26,13 @@ public class DirectoryCellFactory  implements Callback<ListView<GalleryDirectory
     public ListCell<GalleryDirectory> call(ListView<GalleryDirectory> param) {
         ListCell<GalleryDirectory> directoryListCell = new DirectoryGridCell(container);
         directoryListCell.setOnMouseClicked(event -> {
+            if (directoryListCell.getItem() == null)
+                return;
             container.setCurrentDir(directoryListCell.getItem());
-            System.out.println("CLICKED" + directoryListCell.getItem().getDirName());
         });
         directoryListCell.setOnDragDropped(ev -> {
             GalleryGridCell source = (GalleryGridCell) ev.getGestureSource();
             DirectoryGridCell target = (DirectoryGridCell) ev.getGestureTarget();
-            System.out.println("adding img to dir");
             GalleryImage img = source.getItem();
             img.deleteFromCurrentDir();
             GalleryDirectory dir = target.getItem();

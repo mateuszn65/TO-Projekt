@@ -49,7 +49,6 @@ public class GalleryCellFactory implements Callback<GridView<GalleryImage>, Grid
             event.consume();
         });
         gridCell.setOnDragDetected(ev -> {
-            System.out.println("yellow");
             Dragboard db = gridCell.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
             content.putString("str");

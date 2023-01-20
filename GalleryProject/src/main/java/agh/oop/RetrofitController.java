@@ -49,12 +49,6 @@ public class RetrofitController {
         call.enqueue(new GetMiniatureHandler(galleryImage, this, miniatureWidth, miniatureHeight));
     }
 
-    public void initModel(ImageContainer imageContainer, int miniatureWidth, int miniatureHeight, int page, int size){
-        log.info("Initializing model with {} miniatureWidth, {} miniatureHeight", miniatureWidth, miniatureHeight);
-        Call<Map<Integer, String>> call = galleryService.getImages(0, 16);
-        call.enqueue(new GetImagesHandler(imageContainer, this, miniatureWidth, miniatureHeight));
-    }
-
     public Image getPlaceholder() throws IOException {
         Response<List<Byte>> response = galleryService.getImagePlaceholder().execute();
         return SyncResponseHandler.getImage(response);

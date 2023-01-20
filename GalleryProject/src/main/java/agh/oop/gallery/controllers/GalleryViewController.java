@@ -24,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -40,8 +41,6 @@ public class GalleryViewController {
     @FXML
     public ListView<GalleryDirectory> directoriesListView;
     @FXML
-    private VBox galleryView;
-    @FXML
     private ScrollPane scrollPane;
     private ImageContainer imageContainer;
     private Stage primaryStage;
@@ -49,29 +48,27 @@ public class GalleryViewController {
     private RetrofitController retrofitController;
     private Image placeholder;
     private int page = 0;
-    private int pageSize = 4;
+    private int rowSize = 4;
     private int initPageSize = 20;
     private int currentMiniatureWidth = GalleryImage.smallMiniatureWidth;
     private int currentMiniatureHeight = GalleryImage.smallMiniatureHeight;
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
-
-        this.primaryStage.widthProperty().addListener((observable, oldValue, newValue) -> {
+        setPrimaryStageListeners();
+    }
+    private void setPrimaryStageListeners() {
+        ChangeListener<Number> resizeListener = (observable, oldValue, newValue) -> {
+            updatePageSize();
             if (newValue.intValue() < oldValue.intValue())
                 return;
 
             int newInitPageSize = getNumberOfImagesInPage();
             loadMoreOnResize(newInitPageSize);
-        });
-        this.primaryStage.heightProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.intValue() < oldValue.intValue())
-                return;
+        };
 
-            int newInitPageSize = getNumberOfImagesInPage();
-            loadMoreOnResize(newInitPageSize);
-        });
-
+        this.primaryStage.widthProperty().addListener(resizeListener);
+        this.primaryStage.heightProperty().addListener(resizeListener);
 
         this.primaryStage.setOnCloseRequest(t -> {
             Platform.exit();
@@ -88,8 +85,8 @@ public class GalleryViewController {
         return getNumberOfImagesInRow() * getNumberOfImagesInColumn() + getNumberOfImagesInRow();
     }
     private void loadMoreOnResize(int newInitPageSize) {
-        while (newInitPageSize > initPageSize + (page) * pageSize) {
-            retrofitController.loadMore(imageContainer, currentMiniatureWidth, currentMiniatureHeight, page++, pageSize);
+        while (newInitPageSize > initPageSize + (page) * rowSize) {
+            retrofitController.loadMore(imageContainer, currentMiniatureWidth, currentMiniatureHeight, page++, rowSize);
         }
     }
 
@@ -111,7 +108,7 @@ public class GalleryViewController {
     }
 
     public void initialize(int miniatureWidth, int miniatureHeight) throws IOException {
-        addScrollListener();
+        addScrollListeners();
         imageContainer = new ImageContainer(miniatureWidth, miniatureHeight);
         retrofitController = new RetrofitController();
 
@@ -170,9 +167,15 @@ public class GalleryViewController {
     private void resetImages() {
         currentMiniatureHeight = imageContainer.getMiniatureHeight();
         currentMiniatureWidth = imageContainer.getMiniatureWidth();
+        updatePageSize();
+        loadMoreOnResize(getNumberOfImagesInPage());
         imageContainer.getGallery().forEach(img -> retrofitController.getMiniature(img, currentMiniatureWidth, currentMiniatureHeight));
         prepareGridView(currentMiniatureHeight, currentMiniatureWidth, imageContainer.getGallery());
         imagesGridView.setCellFactory(new GalleryCellFactory(currentMiniatureHeight, currentMiniatureWidth, placeholder, primaryStage, retrofitController));
+    }
+
+    private void updatePageSize() {
+        rowSize = getNumberOfImagesInRow();
     }
     public void handleAddDir(String dirName) {
         imageContainer.createDirectory(dirName);
@@ -187,18 +190,30 @@ public class GalleryViewController {
     public void removeDir(GalleryDirectory dir) {
         imageContainer.deleteDir(dir);
     }
-    public void addScrollListener() {
-        scrollPane.fitToWidthProperty().setValue(true);
+    public void addScrollListeners() {
+        scrollPane.setFitToWidth(true);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+
+        scrollPane.setOnScroll(event -> {
+            if (event.getDeltaY() >= 0)
+                return;
+
+            double vvalue = scrollPane.getVvalue();
+            vvalue = Math.max(vvalue - 0.01, 0);
+            scrollPane.setVvalue(vvalue);
+        });
+
         scrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.doubleValue() == scrollPane.getVmax()) {
-                retrofitController.loadMore(imageContainer, imageContainer.getMiniatureWidth(), imageContainer.getMiniatureHeight(), page++, pageSize);
+                retrofitController.loadMore(imageContainer, imageContainer.getMiniatureWidth(), imageContainer.getMiniatureHeight(), page++, rowSize);
             }
         });
+
         imagesGridView.setOnScroll(event -> {
             ScrollBar scrollBar = (ScrollBar) imagesGridView.lookup(".scroll-bar");
+            scrollBar.disableProperty().set(true);
             scrollBar.setVisible(false);
         });
     }
-
 }
